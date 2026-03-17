@@ -77,10 +77,9 @@
             </div>
         </div>
         
-        <p class="subtitle" id="currentDate"></p>
         <h1>Morning Brief</h1>
         
-        <div class="date-nav" id="dateNav"></div>
+        <!-- Date picker removed per user request -->
         
         <div class="brief-content" id="briefContent">
             <p class="loading">Loading...</p>
@@ -90,6 +89,8 @@
             <h3 style="color:#00d4ff;margin-bottom:0.75rem;">Latest Market News</h3>
             <ul id="newsListBottom" style="margin-left:1rem;"><li>Loading...</li></ul>
         </div>
+        
+        <p class="subtitle" id="currentDate" style="margin-top:2rem;"></p>
     </div>
 
     <script>
@@ -121,21 +122,10 @@
         }
         loadMarketData();
         
-        // Set current date
+        // Set current date at bottom
         document.getElementById('currentDate').textContent = new Date().toISOString().split('T')[0];
         
         const briefsPath = 'briefs/';
-        
-        // Generate last 30 dates
-        function getDates() {
-            const dates = [];
-            for (let i = 0; i < 30; i++) {
-                const d = new Date();
-                d.setDate(d.getDate() - i);
-                dates.push(d.toISOString().split('T')[0]);
-            }
-            return dates;
-        }
         
         async function loadBrief(date) {
             const content = document.getElementById('briefContent');
@@ -165,18 +155,8 @@
             }
         }
         
-        function renderDateNav(dates, selected) {
-            const nav = document.getElementById('dateNav');
-            nav.innerHTML = dates.map(d => 
-                `<button class="date-btn ${d === selected ? 'active' : ''}" onclick="loadBrief('${d}')">${d}</button>`
-            ).join('');
-        }
-        
-        // Initialize
-        const dates = getDates();
-        const today = dates[0];
-        renderDateNav(dates, today);
-        loadBrief(today);
+        // Load today's brief
+        loadBrief(new Date().toISOString().split('T')[0]);
     </script>
 </body>
 </html>
