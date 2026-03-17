@@ -75,18 +75,20 @@
             <div style="border-top:1px solid #30363d;padding-top:0.75rem;font-size:0.8rem;">
                 <strong>Fear & Greed Index:</strong> <span id="fgValue">--</span> <span id="fgLabel">Loading...</span> is driving the US market
             </div>
-            <div style="border-top:1px solid #30363d;padding-top:0.75rem;font-size:0.8rem;">
-                <strong>Latest Market News:</strong>
-                <ul id="newsList" style="margin:0.5rem 0 0 1rem;"><li>Loading...</li></ul>
-            </div>
         </div>
+        
+        <p class="subtitle" id="currentDate"></p>
         <h1>Morning Brief</h1>
-        <p class="subtitle">Daily market scan for traders</p>
         
         <div class="date-nav" id="dateNav"></div>
         
         <div class="brief-content" id="briefContent">
             <p class="loading">Loading...</p>
+        </div>
+        
+        <div style="margin-top:1.5rem;background:#21262d;border-radius:8px;padding:1rem;border:1px solid #30363d;">
+            <h3 style="color:#00d4ff;margin-bottom:0.75rem;">Latest Market News</h3>
+            <ul id="newsListBottom" style="margin-left:1rem;"><li>Loading...</li></ul>
         </div>
     </div>
 
@@ -112,11 +114,15 @@
                 
                 const news = data.news ?? [];
                 document.getElementById('newsList').innerHTML = news.map(n => `<li>${n}</li>`).join('');
+                document.getElementById('newsListBottom').innerHTML = news.map(n => `<li>${n}</li>`).join('');
             } catch (e) {
                 console.error('Failed to load market data', e);
             }
         }
         loadMarketData();
+        
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toISOString().split('T')[0];
         
         const briefsPath = 'briefs/';
         
