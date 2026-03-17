@@ -68,20 +68,16 @@
         <!-- Market Ticker -->
         <div style="background:#21262d;border-radius:8px;padding:1rem;margin-bottom:1.5rem;border:1px solid #30363d;">
             <div style="display:flex;flex-wrap:wrap;gap:1.5rem;font-size:0.85rem;margin-bottom:0.75rem;">
-                <span><strong>DOW</strong> 46,993.26 <span style="color:#3fb950;">+0.10%</span></span>
-                <span><strong>S&P 500</strong> 6,716.09 <span style="color:#3fb950;">+0.25%</span></span>
-                <span><strong>NASDAQ</strong> 22,479.53 <span style="color:#3fb950;">+0.47%</span></span>
+                <span id="dow"><strong>DOW</strong> <span class="loading">Loading...</span></span>
+                <span id="sp500"><strong>S&P 500</strong> <span class="loading">...</span></span>
+                <span id="nasdaq"><strong>NASDAQ</strong> <span class="loading">...</span></span>
             </div>
             <div style="border-top:1px solid #30363d;padding-top:0.75rem;font-size:0.8rem;">
-                <strong>Fear & Greed Index:</strong> 21 <span style="color:#f85149;">Extreme Fear</span> is driving the US market
+                <strong>Fear & Greed Index:</strong> <span id="fgValue">--</span> <span id="fgLabel">Loading...</span> is driving the US market
             </div>
             <div style="border-top:1px solid #30363d;padding-top:0.75rem;font-size:0.8rem;">
                 <strong>Latest Market News:</strong>
-                <ul style="margin:0.5rem 0 0 1rem;">
-                    <li>Judge orders Voice of America staff reinstated, reversing Trump's shutdown</li>
-                    <li>The other trade chokepoint at risk from the Iran war</li>
-                    <li>Oil prices jump as Iran warns Strait of Hormuz 'cannot be the same'</li>
-                </ul>
+                <ul id="newsList" style="margin:0.5rem 0 0 1rem;"><li>Loading...</li></ul>
             </div>
         </div>
         <h1>Morning Brief</h1>
@@ -95,6 +91,33 @@
     </div>
 
     <script>
+        // Fetch market data
+        async function loadMarketData() {
+            try {
+                const resp = await fetch('market-data.json');
+                const data = await resp.json();
+                
+                const fmt = (n) => n?.toLocaleString() ?? '--';
+                const pct = (n) => (n >= 0 ? '+' : '') + (n?.toFixed(2) ?? '--') + '%';
+                const color = (n) => n >= 0 ? '#3fb950' : '#f85149';
+                
+                document.getElementById('dow').innerHTML = `<strong>DOW</strong> ${fmt(data.indices?.dow?.value)} <span style="color:${color(data.indices?.dow?.change)}">${pct(data.indices?.dow?.change)}</span>`;
+                document.getElementById('sp500').innerHTML = `<strong>S&P 500</strong> ${fmt(data.indices?.sp500?.value)} <span style="color:${color(data.indices?.sp500?.change)}">${pct(data.indices?.sp500?.change)}</span>`;
+                document.getElementById('nasdaq').innerHTML = `<strong>NASDAQ</strong> ${fmt(data.indices?.nasdaq?.value)} <span style="color:${color(data.indices?.nasdaq?.change)}">${pct(data.indices?.nasdaq?.change)}</span>`;
+                
+                document.getElementById('fgValue').textContent = data.fearGreed?.value ?? '--';
+                const fgLabel = document.getElementById('fgLabel');
+                fgLabel.textContent = data.fearGreed?.label ?? '--';
+                fgLabel.style.color = data.fearGreed?.value < 30 ? '#f85149' : data.fearGreed?.value > 70 ? '#3fb950' : '#d29922';
+                
+                const news = data.news ?? [];
+                document.getElementById('newsList').innerHTML = news.map(n => `<li>${n}</li>`).join('');
+            } catch (e) {
+                console.error('Failed to load market data', e);
+            }
+        }
+        loadMarketData();
+        
         const briefsPath = 'briefs/';
         
         // Generate last 30 dates
