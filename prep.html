@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Market Prep</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #21262d;
+        }
+        h1 { font-size: 1.5rem; color: #58a6ff; }
+        .date { color: #8b949e; }
+        .subtitle { color: #8b949e; font-size: 0.9rem; margin-bottom: 2rem; }
+        
+        .cards-container {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            scroll-snap-type: x mandatory;
+        }
+        
+        .card {
+            flex: 0 0 auto;
+            width: 320px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1.25rem;
+            scroll-snap-align: start;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-time {
+            background: #238636;
+            color: #fff;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .card-title {
+            color: #58a6ff;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .checklist { list-style: none; }
+        .checklist li {
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .checklist li:last-child { border-bottom: none; }
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: #58a6ff;
+        }
+        .checklist li.checked::before { content: '☑'; }
+        .checklist li.checked { color: #3fb950; }
+        
+        .tickers-input {
+            width: 100%;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 0.5rem;
+            color: #c9d1d9;
+            font-family: monospace;
+            font-size: 0.85rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        .temp-check {
+            margin-top: 0.5rem;
+        }
+        
+        .temp-check label {
+            display: block;
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            background: #21262d;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .temp-check input { margin-right: 0.5rem; }
+        
+        .grade-display {
+            text-align: center;
+            padding: 1rem;
+            background: #238636;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: none;
+        }
+        .grade-display.show { display: block; }
+        
+        .sizing-guide {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #21262d;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .sizing-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .sizing-legend span {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        .grade-a { background: #238636; color: #fff; }
+        .grade-b { background: #58a6ff; color: #fff; }
+        .grade-c { background: #d29922; color: #fff; }
+        .grade-d { background: #f85149; color: #fff; }
+        .grade-f { background: #8b0000; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>🎯 Pre-Market Prep</h1>
+            <p class="subtitle">Not predicting — just asking: what is in play today?</p>
+        </div>
+        <div class="date" id="currentDate"></div>
+    </div>
+    
+    <div class="cards-container">
+        <!-- Card 1: Market Awareness -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-time">~8:30 AM</span>
+            </div>
+            <div class="card-title">📊 Market Awareness</div>
+            <ul class="checklist" id="awareness-list">
+                <li>Check overnight futures, pre-market movers, and macro news</li>
+                <li>Review prior day tickers — what followed through, what failed</li>
+                <li>Scan earnings releases and surprises</li>
+                <li>Note IPOs, secondaries, and lockup expirations</li>
+                <li>Review analyst upgrades and downgrades</li>
+                <li>Check macro events: Fed speakers, CPI, jobs data, etc.</li>
+            </ul>
+        </div>
+        
+        <!-- Card 2: Watch List Build -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-time">~8:45 AM</span>
+            </div>
+            <div class="card-title">📋 Watch List Build</div>
+            <ul class="checklist" id="watchlist-list">
+                <li>Add stocks with fresh news catalysts</li>
+                <li>Add stocks making outsized pre-market moves</li>
+                <li>Add high relative volume movers</li>
+                <li>Mark key technical levels — prior day high/low, prior close</li>
+                <li>Draw trend lines and note key support/resistance</li>
+                <li>Set price alerts for every ticker on the watch list</li>
+            </ul>
+            <p style="margin-top:1rem; color:#8b949e; font-size:0.8rem;">Today's tickers:</p>
+            <textarea class="tickers-input" id="tickers" placeholder="e.g. NVDA, TSLA, SPY..."></textarea>
+        </div>
+        
+        <!-- Card 3: Temp Check -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-time">~9:00 AM</span>
+            </div>
+            <div class="card-title">🌡️ Temp Check — Daily Report Card</div>
+            <div class="temp-check">
+                <label><input type="radio" name="temp" value="A"> Did I sleep well? Am I rested?</label>
+                <label><input type="radio" name="temp" value="B"> Am I emotionally centered — nothing off outside of trading?</label>
+                <label><input type="radio" name="temp" value="C"> Am I mentally sharp and focused today?</label>
+            </div>
+            <p style="margin-top:1rem; color:#8b949e; font-size:0.8rem;">Today's grade:</p>
+            <div class="temp-check">
+                <label><input type="radio" name="grade" value="A"> A — Full sizing. Press your edge.</label>
+                <label><input type="radio" name="grade" value="B"> B — Standard sizing. Stay disciplined.</label>
+                <label><input type="radio" name="grade" value="C"> C — Size way down. Trade selectively.</label>
+                <label><input type="radio" name="grade" value="D"> D — Strongly consider not trading.</label>
+                <label><input type="radio" name="grade" value="F"> F — Do not trade. Protect capital.</label>
+            </div>
+            <div class="grade-display" id="gradeDisplay"></div>
+            <div class="sizing-guide">
+                <strong>Sizing by grade:</strong>
+                <div class="sizing-legend">
+                    <span class="grade-a">A = Full</span>
+                    <span class="grade-b">B = Standard</span>
+                    <span class="grade-c">C = Down</span>
+                    <span class="grade-d">D = Sit out</span>
+                    <span class="grade-f">F = No trade</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 4: Final Check -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-time">~9:25 AM</span>
+            </div>
+            <div class="card-title">✅ Final Check Before Open</div>
+            <ul class="checklist" id="final-list">
+                <li>All alerts are set — no excuses to miss a move</li>
+                <li>Risk sizing confirmed based on today's grade</li>
+                <li>Not committed to any ticker or sector — ready to react</li>
+                <li>What is in play today that I should watch?</li>
+            </ul>
+            <textarea class="tickers-input" id="playNotes" placeholder="Notes: what looks set up today..." style="margin-top:1rem;"></textarea>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date
+        const today = new Date().toLocaleDateString('en-US', { 
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+        });
+        document.getElementById('currentDate').textContent = today;
+        
+        // Load saved state
+        const saved = JSON.parse(localStorage.getItem('preMarketPrep') || '{}');
+        if (saved.date === today) {
+            // Restore checkboxes
+            document.querySelectorAll('#awareness-list li').forEach((li, i) => {
+                if (saved.awareness?.includes(i)) li.classList.add('checked');
+            });
+            document.querySelectorAll('#watchlist-list li').forEach((li, i) => {
+                if (saved.watchlist?.includes(i)) li.classList.add('checked');
+            });
+            document.querySelectorAll('#final-list li').forEach((li, i) => {
+                if (saved.final?.includes(i)) li.classList.add('checked');
+            });
+            // Restore inputs
+            if (saved.tickers) document.getElementById('tickers').value = saved.tickers;
+            if (saved.playNotes) document.getElementById('playNotes').value = saved.playNotes;
+            if (saved.grade) {
+                document.querySelector(`input[name="grade"][value="${saved.grade}"]`).checked = true;
+                showGrade(saved.grade);
+            }
+        }
+        
+        // Toggle checkboxes on click
+        document.querySelectorAll('.checklist li').forEach(li => {
+            li.addEventListener('click', () => li.classList.toggle('checked'));
+        });
+        
+        // Grade display
+        function showGrade(grade) {
+            const display = document.getElementById('gradeDisplay');
+            const grades = { A: 'A — Full sizing. Press.', B: 'B — Standard. Stay sharp.', C: 'C — Size down.', D: 'D — Consider sitting out.', F: 'F — No trading.' };
+            display.textContent = grade + ' — ' + grades[grade];
+            display.className = 'grade-display show grade-' + grade.toLowerCase();
+        }
+        document.querySelectorAll('input[name="grade"]').forEach(r => {
+            r.addEventListener('change', (e) => showGrade(e.target.value));
+        });
+        
+        // Save on changes
+        function save() {
+            const state = { date: today, awareness: [], watchlist: [], final: [], tickers: '', playNotes: '', grade: '' };
+            document.querySelectorAll('#awareness-list li').forEach((li, i) => {
+                if (li.classList.contains('checked')) state.awareness.push(i);
+            });
+            document.querySelectorAll('#watchlist-list li').forEach((li, i) => {
+                if (li.classList.contains('checked')) state.watchlist.push(i);
+            });
+            document.querySelectorAll('#final-list li').forEach((li, i) => {
+                if (li.classList.contains('checked')) state.final.push(i);
+            });
+            state.tickers = document.getElementById('tickers').value;
+            state.playNotes = document.getElementById('playNotes').value;
+            const gradeEl = document.querySelector('input[name="grade"]:checked');
+            if (gradeEl) state.grade = gradeEl.value;
+            localStorage.setItem('preMarketPrep', JSON.stringify(state));
+        }
+        
+        document.querySelectorAll('.checklist li, input, textarea').forEach(el => {
+            el.addEventListener('change', save);
+            el.addEventListener('click', save);
+        });
+    </script>
+</body>
+</html>

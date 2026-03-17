@@ -3,6 +3,6 @@
 
 # But not these
 !.gitignore
-!index.html
+!*.html
 !briefs/
 !briefs/*.md
