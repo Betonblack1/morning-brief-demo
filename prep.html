@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pre-Market Prep</title>
+<title>Morning Brief</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -35,11 +35,9 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  padding: 0;
   overflow-x: hidden;
 }
 
-/* scanline texture */
 body::before {
   content: '';
   position: fixed;
@@ -61,7 +59,6 @@ body::before {
   top: 0;
   z-index: 100;
 }
-
 .topbar-nav { display: flex; gap: 1.5rem; align-items: center; }
 .topbar-nav a {
   font-family: var(--mono);
@@ -76,130 +73,122 @@ body::before {
 }
 .topbar-nav a.active { color: var(--green); background: var(--green-dim); }
 .topbar-nav a:hover:not(.active) { color: var(--text); }
-
-.topbar-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.topbar-title {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  color: var(--text);
-  text-transform: uppercase;
-}
-
-.topbar-date {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-
-/* COUNTDOWN TIMER */
-.countdown-wrap {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.countdown-label {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.countdown {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--green);
-  background: var(--green-dim);
-  padding: 0.2rem 0.6rem;
-  border-radius: 3px;
-  border: 1px solid var(--green-glow);
-  min-width: 80px;
-  text-align: center;
-  transition: color 0.3s, background 0.3s;
-}
+.topbar-center { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.topbar-title { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em; color: var(--text); text-transform: uppercase; }
+.topbar-date { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; }
+.countdown-wrap { display: flex; align-items: center; gap: 0.5rem; }
+.countdown-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.countdown { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; color: var(--green); background: var(--green-dim); padding: 0.2rem 0.6rem; border-radius: 3px; border: 1px solid var(--green-glow); min-width: 80px; text-align: center; transition: color 0.3s, background 0.3s; }
 .countdown.market-open { color: var(--amber); background: var(--amber-dim); border-color: var(--amber); }
 .countdown.post-market { color: var(--muted); background: var(--surface2); border-color: var(--border); }
 
-/* PROGRESS BAR */
-.progress-section {
-  padding: 1rem 2rem;
+/* HERO CHART */
+.hero {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
+}
+.hero-svg { width: 100%; height: 100%; display: block; }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(to top, rgba(8,11,15,0.85) 0%, rgba(8,11,15,0.2) 60%, transparent 100%);
+}
+.hero-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 0.25rem;
+}
+.hero-title {
+  font-family: var(--mono);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.04em;
+}
+.hero-sub {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+/* INDICES STRIP */
+.indices-strip {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  overflow-x: auto;
+}
+.index-cell {
+  flex: 1;
+  min-width: 140px;
+  padding: 0.85rem 1.25rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fadeUp 0.4s ease both;
+}
+.index-cell:last-child { border-right: none; }
+.index-cell:nth-child(1) { animation-delay: 0.05s; }
+.index-cell:nth-child(2) { animation-delay: 0.1s; }
+.index-cell:nth-child(3) { animation-delay: 0.15s; }
+.index-cell:nth-child(4) { animation-delay: 0.2s; }
+.index-name { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.index-val { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--text); }
+.index-chg { font-family: var(--mono); font-size: 0.72rem; font-weight: 500; }
+.index-chg.up { color: var(--green); }
+.index-chg.down { color: var(--red); }
+.index-chg.flat { color: var(--muted); }
+
+/* FEAR & GREED */
+.fg-bar-wrap {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
 }
-
-.progress-bar-outer {
-  flex: 1;
-  height: 3px;
-  background: var(--dim);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.progress-bar-fill {
-  height: 100%;
-  background: var(--green);
-  border-radius: 2px;
-  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
-  width: 0%;
-  box-shadow: 0 0 8px var(--green-glow);
-}
-.progress-stats {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--muted);
-  white-space: nowrap;
-  display: flex;
-  gap: 1.5rem;
-}
-.progress-stats .pct {
-  color: var(--green);
-  font-weight: 600;
-}
+.fg-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.fg-bar-outer { flex: 1; height: 4px; background: var(--dim); border-radius: 2px; overflow: hidden; }
+.fg-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+.fg-value { font-family: var(--mono); font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+.fg-text { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); white-space: nowrap; min-width: 100px; }
 
 /* MAIN LAYOUT */
-.main {
-  padding: 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
-  max-width: 1400px;
-  margin: 0 auto;
+.main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 2rem; display: grid; grid-template-columns: 1fr 320px; gap: 1.25rem; }
+
+@media (max-width: 800px) {
+  .main { grid-template-columns: 1fr; padding: 1rem; }
+  .topbar { padding: 0.75rem 1rem; }
+  .hero-overlay { padding: 1rem; }
+  .hero-title { font-size: 1.2rem; }
 }
 
-/* CARDS */
+/* BRIEF CARD */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: border-color 0.2s;
   animation: fadeUp 0.4s ease both;
 }
-.card:nth-child(1) { animation-delay: 0.05s; }
-.card:nth-child(2) { animation-delay: 0.1s; }
-.card:nth-child(3) { animation-delay: 0.15s; }
-.card:nth-child(4) { animation-delay: 0.2s; }
-.card:nth-child(5) { animation-delay: 0.25s; }
-.card:hover { border-color: var(--border2); }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.15s; }
+.card:nth-child(3) { animation-delay: 0.2s; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
 .card-head {
   display: flex;
@@ -209,217 +198,49 @@ body::before {
   border-bottom: 1px solid var(--border);
   background: var(--surface2);
 }
+.card-title { font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); }
+.card-badge { font-family: var(--mono); font-size: 0.6rem; color: var(--green); background: var(--green-dim); padding: 0.15rem 0.5rem; border-radius: 3px; border: 1px solid var(--green-glow); letter-spacing: 0.06em; }
+.card-body { padding: 1.25rem; }
 
-.card-time {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: var(--green);
-  background: var(--green-dim);
-  padding: 0.2rem 0.5rem;
-  border-radius: 3px;
-  border: 1px solid var(--green-glow);
-}
+/* BRIEF CONTENT */
+.brief-content { font-size: 0.875rem; line-height: 1.75; color: var(--text); }
+.brief-content h1 { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--text); margin: 1.25rem 0 0.5rem; letter-spacing: 0.04em; }
+.brief-content h2 { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; margin: 1.25rem 0 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
+.brief-content h3 { font-family: var(--mono); font-size: 0.75rem; font-weight: 500; color: var(--blue); letter-spacing: 0.08em; text-transform: uppercase; margin: 1rem 0 0.35rem; }
+.brief-content h2:first-child, .brief-content h1:first-child { margin-top: 0; }
+.brief-content p { margin-bottom: 0.75rem; color: var(--text); }
+.brief-content strong { font-weight: 600; color: var(--text); }
+.brief-content em { color: var(--muted); font-style: italic; }
+.brief-content ul { margin: 0.5rem 0 0.75rem 0; display: flex; flex-direction: column; gap: 4px; }
+.brief-content li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.83rem; line-height: 1.55; }
+.brief-content li::before { content: '›'; color: var(--green); font-family: var(--mono); flex-shrink: 0; margin-top: 1px; }
+.brief-content hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+.brief-content table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.8rem; }
+.brief-content th { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); text-align: left; }
+.brief-content td { padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); color: var(--text); }
+.brief-content tr:last-child td { border-bottom: none; }
+.brief-loading { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); padding: 2rem; text-align: center; letter-spacing: 0.05em; }
+.brief-error { font-family: var(--mono); font-size: 0.75rem; color: var(--red); padding: 2rem; text-align: center; }
 
-.card-title {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+/* NEWS SIDEBAR */
+.news-list { display: flex; flex-direction: column; gap: 1px; }
+.news-item {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+  line-height: 1.5;
   color: var(--text);
-}
-
-.card-progress-mini {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--muted);
-}
-.card-progress-mini span { color: var(--green); }
-
-.card-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 0.75rem; }
-
-/* CHECKLIST */
-.checklist { list-style: none; display: flex; flex-direction: column; gap: 1px; }
-.checklist li {
   display: flex;
   align-items: flex-start;
-  gap: 0.6rem;
-  padding: 0.5rem 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.82rem;
-  line-height: 1.5;
-  color: var(--text);
-  transition: background 0.1s, color 0.2s;
-  user-select: none;
-  position: relative;
+  gap: 0.5rem;
 }
-.checklist li:hover { background: var(--surface2); }
+.news-item:last-child { border-bottom: none; }
+.news-item::before { content: '›'; color: var(--green); font-family: var(--mono); flex-shrink: 0; margin-top: 1px; }
+.news-loading { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); padding: 1rem 0; text-align: center; }
 
-.check-box {
-  width: 15px;
-  height: 15px;
-  border: 1px solid var(--border2);
-  border-radius: 2px;
-  flex-shrink: 0;
-  margin-top: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s, border-color 0.15s;
-  font-size: 10px;
-  color: transparent;
-}
-.checklist li.checked .check-box {
-  background: var(--green);
-  border-color: var(--green);
-  color: #000;
-}
-.checklist li.checked .check-text {
-  color: var(--muted);
-  text-decoration: line-through;
-  text-decoration-color: var(--dim);
-}
-
-/* TEXTAREA */
-.field-label {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 0.3rem;
-}
-.field-input {
-  width: 100%;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 0.6rem 0.7rem;
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  resize: vertical;
-  min-height: 64px;
-  transition: border-color 0.15s;
-  line-height: 1.6;
-}
-.field-input:focus { outline: none; border-color: var(--green); }
-.field-input::placeholder { color: var(--dim); }
-
-/* GRADE SECTION */
-.grade-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.grade-option {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0.6rem;
-  border-radius: 4px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.15s;
-  font-size: 0.8rem;
-}
-.grade-option:hover { background: var(--surface2); }
-.grade-option input { display: none; }
-.grade-letter {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  font-weight: 600;
-  width: 22px;
-  text-align: center;
-  flex-shrink: 0;
-}
-.grade-desc { color: var(--muted); font-size: 0.78rem; line-height: 1.4; }
-
-.grade-option.sel-A { background: #00c89612; border-color: #00c89630; }
-.grade-option.sel-A .grade-letter { color: var(--green); }
-.grade-option.sel-A .grade-desc { color: #00c896aa; }
-.grade-option.sel-B { background: #4da6ff12; border-color: #4da6ff30; }
-.grade-option.sel-B .grade-letter { color: var(--blue); }
-.grade-option.sel-B .grade-desc { color: #4da6ffaa; }
-.grade-option.sel-C { background: #f0a50012; border-color: #f0a50030; }
-.grade-option.sel-C .grade-letter { color: var(--amber); }
-.grade-option.sel-C .grade-desc { color: #f0a500aa; }
-.grade-option.sel-D { background: #f0505012; border-color: #f0505030; }
-.grade-option.sel-D .grade-letter { color: var(--red); }
-.grade-option.sel-D .grade-desc { color: #f05050aa; }
-.grade-option.sel-F { background: #f0505020; border-color: #f0505050; }
-.grade-option.sel-F .grade-letter { color: var(--red); }
-.grade-option.sel-F .grade-desc { color: var(--red); }
-
-/* PLAYBOOK */
-.playbook-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-}
-.play-tag {
-  padding: 0.4rem 0.6rem;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--muted);
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: center;
-  background: var(--surface2);
-  user-select: none;
-}
-.play-tag:hover { border-color: var(--border2); color: var(--text); }
-.play-tag.active { border-color: var(--green-glow); color: var(--green); background: var(--green-dim); }
-
-/* RULE NOTE */
-.rule-note {
-  font-size: 0.75rem;
-  font-style: italic;
-  color: var(--muted);
-  padding: 0.5rem 0.75rem;
-  background: var(--surface2);
-  border-left: 2px solid var(--green-glow);
-  border-radius: 0 4px 4px 0;
-  line-height: 1.5;
-}
-
-/* DIVIDER */
-.divider { height: 1px; background: var(--border); margin: 0.25rem 0; }
-
-/* MARKET STATUS STRIP */
-.status-strip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  padding: 0.5rem 2rem;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  overflow-x: auto;
-}
-.status-item { display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
-.status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
-.status-dot.green { background: var(--green); box-shadow: 0 0 4px var(--green); }
-.status-dot.amber { background: var(--amber); }
-.status-dot.red { background: var(--red); }
-
-@media (max-width: 700px) {
-  .topbar { padding: 0.75rem 1rem; }
-  .main { padding: 1rem; grid-template-columns: 1fr; }
-  .progress-section { padding: 0.75rem 1rem; }
-  .status-strip { gap: 1rem; }
-}
+/* MINI CHART in sidebar */
+.mini-chart-wrap { padding: 0.75rem 1.25rem 0; }
+.mini-chart-svg { width: 100%; height: 60px; display: block; }
 </style>
 </head>
 <body>
@@ -427,11 +248,11 @@ body::before {
 <!-- TOP BAR -->
 <div class="topbar">
   <nav class="topbar-nav">
-    <a href="index.html">Morning Brief</a>
-    <a href="prep.html" class="active">Pre-Market Prep</a>
+    <a href="index.html" class="active">Morning Brief</a>
+    <a href="prep.html">Pre-Market Prep</a>
   </nav>
   <div class="topbar-center">
-    <div class="topbar-title">Pre-Market Prep</div>
+    <div class="topbar-title">Morning Brief</div>
     <div class="topbar-date" id="currentDate"></div>
   </div>
   <div class="countdown-wrap">
@@ -440,297 +261,254 @@ body::before {
   </div>
 </div>
 
-<!-- STATUS STRIP -->
-<div class="status-strip">
-  <div class="status-item"><div class="status-dot" id="futures-dot"></div><span>Futures</span><span id="futures-status" style="color:var(--text)">—</span></div>
-  <div class="status-item"><div class="status-dot amber"></div><span>Pre-Market</span><span id="session-label" style="color:var(--text)">—</span></div>
-  <div class="status-item"><div class="status-dot green" style="animation: pulse 2s infinite;"></div><span>NYSE Open</span><span style="color:var(--text)">9:30 AM ET</span></div>
-  <div class="status-item"><div class="status-dot"></div><span>NYSE Close</span><span style="color:var(--text)">4:00 PM ET</span></div>
-</div>
-
-<style>
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-</style>
-
-<!-- PROGRESS BAR -->
-<div class="progress-section">
-  <div class="progress-bar-outer">
-    <div class="progress-bar-fill" id="globalProgress"></div>
-  </div>
-  <div class="progress-stats">
-    <span><span class="pct" id="globalPct">0%</span> complete</span>
-    <span id="globalFraction" style="color:var(--dim)">0 / 0 tasks</span>
+<!-- HERO CHART -->
+<div class="hero">
+  <svg class="hero-svg" id="heroChart" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="hero-overlay">
+    <div class="hero-label">NYSE · NASDAQ · Pre-Market</div>
+    <div class="hero-title">Morning Brief</div>
+    <div class="hero-sub">What is in play today — not a prediction, a preparation.</div>
   </div>
 </div>
 
-<!-- CARDS GRID -->
+<!-- INDICES -->
+<div class="indices-strip">
+  <div class="index-cell">
+    <div class="index-name">DOW</div>
+    <div class="index-val" id="dow-val">—</div>
+    <div class="index-chg flat" id="dow-chg">—</div>
+  </div>
+  <div class="index-cell">
+    <div class="index-name">S&amp;P 500</div>
+    <div class="index-val" id="sp-val">—</div>
+    <div class="index-chg flat" id="sp-chg">—</div>
+  </div>
+  <div class="index-cell">
+    <div class="index-name">NASDAQ</div>
+    <div class="index-val" id="nq-val">—</div>
+    <div class="index-chg flat" id="nq-chg">—</div>
+  </div>
+  <div class="index-cell">
+    <div class="index-name">Fear &amp; Greed</div>
+    <div class="index-val" id="fg-num">—</div>
+    <div class="index-chg flat" id="fg-lbl">—</div>
+  </div>
+</div>
+
+<!-- F&G BAR -->
+<div class="fg-bar-wrap">
+  <div class="fg-label">Fear &amp; Greed</div>
+  <div class="fg-bar-outer"><div class="fg-bar-fill" id="fg-fill" style="width:0%; background: var(--muted);"></div></div>
+  <div class="fg-value" id="fg-pct">—</div>
+  <div class="fg-text" id="fg-txt">Loading...</div>
+</div>
+
+<!-- MAIN -->
 <div class="main">
 
-  <!-- CARD 1: Market Awareness -->
+  <!-- BRIEF -->
   <div class="card">
     <div class="card-head">
-      <span class="card-time">8:30 AM</span>
-      <span class="card-title">Market Awareness</span>
-      <span class="card-progress-mini"><span id="c1p">0</span>/6</span>
+      <span class="card-title">Today's Brief</span>
+      <span class="card-badge" id="brief-date-badge">—</span>
     </div>
     <div class="card-body">
-      <ul class="checklist" id="awareness-list">
-        <li><div class="check-box">✓</div><span class="check-text">Check overnight futures, pre-market movers, and macro news</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Review prior day tickers — what followed through, what failed</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Scan earnings releases and surprises</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Note IPOs, secondaries, and lockup expirations</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Review analyst upgrades and downgrades</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Check macro events: Fed speakers, CPI, jobs data, etc.</span></li>
-      </ul>
-      <div class="rule-note">Not predicting — just asking: what is in play today that I should watch should it set up?</div>
-    </div>
-  </div>
-
-  <!-- CARD 2: Watch List Build -->
-  <div class="card">
-    <div class="card-head">
-      <span class="card-time">8:45 AM</span>
-      <span class="card-title">Watch List Build</span>
-      <span class="card-progress-mini"><span id="c2p">0</span>/6</span>
-    </div>
-    <div class="card-body">
-      <ul class="checklist" id="watchlist-list">
-        <li><div class="check-box">✓</div><span class="check-text">Add stocks with fresh news catalysts</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Add stocks making outsized pre-market moves</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Add high relative volume movers</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Mark key technical levels — prior day high/low, prior close</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Draw trend lines and note key support/resistance</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Set price alerts for every ticker on the watch list</span></li>
-      </ul>
-      <div>
-        <div class="field-label">Today's tickers</div>
-        <textarea class="field-input" id="tickers" placeholder="NVDA (earnings gap), TSLA (upgrade), SPY (CPI)..."></textarea>
+      <div class="brief-content" id="briefContent">
+        <div class="brief-loading">Loading brief...</div>
       </div>
     </div>
   </div>
 
-  <!-- CARD 3: Temp Check -->
-  <div class="card">
-    <div class="card-head">
-      <span class="card-time">9:00 AM</span>
-      <span class="card-title">Temp Check</span>
-      <span class="card-progress-mini"><span id="c3p">—</span></span>
-    </div>
-    <div class="card-body">
-      <div>
-        <div class="field-label">Mental state check</div>
-        <ul class="checklist" id="temp-list">
-          <li><div class="check-box">✓</div><span class="check-text">Did I sleep well? Am I rested?</span></li>
-          <li><div class="check-box">✓</div><span class="check-text">Am I emotionally centered — nothing off outside trading?</span></li>
-          <li><div class="check-box">✓</div><span class="check-text">Am I mentally sharp and focused today?</span></li>
-        </ul>
+  <!-- SIDEBAR -->
+  <div style="display:flex; flex-direction:column; gap:1.25rem;">
+
+    <!-- MINI CHART -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">S&amp;P 500 — Intraday</span>
+        <span class="card-badge">Live</span>
       </div>
-      <div class="divider"></div>
-      <div>
-        <div class="field-label">Today's grade</div>
-        <div class="grade-grid" id="grade-grid">
-          <label class="grade-option" data-grade="A">
-            <input type="radio" name="grade" value="A">
-            <span class="grade-letter">A</span>
-            <span class="grade-desc">Full sizing — press your edge</span>
-          </label>
-          <label class="grade-option" data-grade="B">
-            <input type="radio" name="grade" value="B">
-            <span class="grade-letter">B</span>
-            <span class="grade-desc">Standard sizing, stay disciplined</span>
-          </label>
-          <label class="grade-option" data-grade="C">
-            <input type="radio" name="grade" value="C">
-            <span class="grade-letter">C</span>
-            <span class="grade-desc">Size way down, trade selectively</span>
-          </label>
-          <label class="grade-option" data-grade="D">
-            <input type="radio" name="grade" value="D">
-            <span class="grade-letter">D</span>
-            <span class="grade-desc">Strongly consider sitting out</span>
-          </label>
-          <label class="grade-option" data-grade="F">
-            <input type="radio" name="grade" value="F">
-            <span class="grade-letter">F</span>
-            <span class="grade-desc">Do not trade — protect capital</span>
-          </label>
+      <div class="mini-chart-wrap">
+        <svg class="mini-chart-svg" id="miniChart" viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="card-body" style="padding-top:0.5rem;">
+        <div style="font-family:var(--mono); font-size:0.62rem; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase;">Simulated pre-market pattern</div>
+      </div>
+    </div>
+
+    <!-- NEWS -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Latest News</span>
+        <span class="card-badge">Today</span>
+      </div>
+      <div class="card-body">
+        <div class="news-list" id="newsList">
+          <div class="news-loading">Loading news...</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- CARD 4: Playbook -->
-  <div class="card">
-    <div class="card-head">
-      <span class="card-time">9:15 AM</span>
-      <span class="card-title">Playbook</span>
-      <span class="card-progress-mini" id="c4p" style="color:var(--muted)">tag setups</span>
-    </div>
-    <div class="card-body">
-      <div>
-        <div class="field-label">Setups in play today</div>
-        <div class="playbook-grid" id="playbook-grid">
-          <div class="play-tag" data-play="Gap & Go">Gap &amp; Go</div>
-          <div class="play-tag" data-play="VWAP Reclaim">VWAP Reclaim</div>
-          <div class="play-tag" data-play="Breakout">Breakout</div>
-          <div class="play-tag" data-play="Breakdown">Breakdown</div>
-          <div class="play-tag" data-play="Earnings Fade">Earnings Fade</div>
-          <div class="play-tag" data-play="Earnings Momentum">Earnings Momo</div>
-          <div class="play-tag" data-play="Float Rotation">Float Rotation</div>
-          <div class="play-tag" data-play="Opening Range">Opening Range</div>
-          <div class="play-tag" data-play="Reversal">Reversal</div>
-          <div class="play-tag" data-play="Sector Sympathy">Sector Sympathy</div>
-        </div>
-      </div>
-      <div>
-        <div class="field-label">Playbook notes</div>
-        <textarea class="field-input" id="playbookNotes" placeholder="What setups are lining up and why..."></textarea>
-      </div>
-    </div>
   </div>
-
-  <!-- CARD 5: Final Check -->
-  <div class="card">
-    <div class="card-head">
-      <span class="card-time">9:25 AM</span>
-      <span class="card-title">Final Check Before Open</span>
-      <span class="card-progress-mini"><span id="c5p">0</span>/4</span>
-    </div>
-    <div class="card-body">
-      <ul class="checklist" id="final-list">
-        <li><div class="check-box">✓</div><span class="check-text">All alerts are set — no excuses to miss a move</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Risk sizing confirmed based on today's grade</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Not committed to any ticker — ready to react to what sets up</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Playbooks reviewed — I know what I'm looking for</span></li>
-      </ul>
-      <div>
-        <div class="field-label">Open notes</div>
-        <textarea class="field-input" id="playNotes" placeholder="What looks set up today..."></textarea>
-      </div>
-      <div class="rule-note">I am not trying to predict anything. I am never committed to any specific ticker or sector.</div>
-    </div>
-  </div>
-
-</div><!-- /main -->
+</div>
 
 <script>
-const today = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-document.getElementById('currentDate').textContent = today;
+// ── DATE ───────────────────────────────────────────────────
+const todayStr = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+const isoDate = new Date().toISOString().split('T')[0];
+document.getElementById('currentDate').textContent = todayStr;
+document.getElementById('brief-date-badge').textContent = isoDate;
 
 // ── COUNTDOWN ──────────────────────────────────────────────
+function pad(n) { return String(n).padStart(2,'0'); }
 function updateCountdown() {
   const now = new Date();
-  const et = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-  const open = new Date(et); open.setHours(9, 30, 0, 0);
-  const close = new Date(et); close.setHours(16, 0, 0, 0);
+  const et = new Date(now.toLocaleString('en-US', { timeZone:'America/New_York' }));
+  const open = new Date(et); open.setHours(9,30,0,0);
+  const close = new Date(et); close.setHours(16,0,0,0);
   const el = document.getElementById('countdown');
   const day = et.getDay();
-  const isWeekend = day === 0 || day === 6;
-
-  if (isWeekend) {
-    el.textContent = 'WEEKEND'; el.className = 'countdown post-market'; return;
+  if (day===0||day===6) { el.textContent='WEEKEND'; el.className='countdown post-market'; return; }
+  if (et>=open && et<=close) {
+    const d=close-et, h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000), s=Math.floor((d%60000)/1000);
+    el.textContent=`OPEN ${pad(h)}:${pad(m)}:${pad(s)}`; el.className='countdown market-open'; return;
   }
-  if (et >= open && et <= close) {
-    const diff = close - et;
-    const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-    el.textContent = `OPEN ${pad(h)}:${pad(m)}:${pad(s)}`; el.className = 'countdown market-open'; return;
-  }
-  if (et > close) {
-    el.textContent = 'CLOSED'; el.className = 'countdown post-market'; return;
-  }
-  const diff = open - et;
-  const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-  el.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`; el.className = 'countdown';
-  // session label
-  const preOpen = new Date(et); preOpen.setHours(4,0,0,0);
-  document.getElementById('session-label').textContent = et >= preOpen ? 'ACTIVE' : 'INACTIVE';
+  if (et>close) { el.textContent='CLOSED'; el.className='countdown post-market'; return; }
+  const d=open-et, h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000), s=Math.floor((d%60000)/1000);
+  el.textContent=`${pad(h)}:${pad(m)}:${pad(s)}`; el.className='countdown';
 }
-function pad(n) { return String(n).padStart(2,'0'); }
-updateCountdown(); setInterval(updateCountdown, 1000);
+updateCountdown(); setInterval(updateCountdown,1000);
 
-// ── CHECKLISTS ─────────────────────────────────────────────
-const lists = {
-  'awareness-list': 'c1p',
-  'watchlist-list': 'c2p',
-  'temp-list': 'c3p',
-  'final-list': 'c5p'
-};
-
-document.querySelectorAll('.checklist li').forEach(li => {
-  li.addEventListener('click', () => { li.classList.toggle('checked'); updateProgress(); save(); });
-});
-
-function updateProgress() {
-  let total = 0, done = 0;
-  Object.entries(lists).forEach(([listId, counterId]) => {
-    const items = document.querySelectorAll(`#${listId} li`);
-    const checked = document.querySelectorAll(`#${listId} li.checked`);
-    document.getElementById(counterId).textContent = checked.length;
-    total += items.length; done += checked.length;
-  });
-  const pct = total ? Math.round(done/total*100) : 0;
-  document.getElementById('globalProgress').style.width = pct + '%';
-  document.getElementById('globalPct').textContent = pct + '%';
-  document.getElementById('globalFraction').textContent = `${done} / ${total} tasks`;
-}
-
-// ── GRADE ──────────────────────────────────────────────────
-document.querySelectorAll('.grade-option').forEach(opt => {
-  opt.addEventListener('click', () => {
-    const g = opt.dataset.grade;
-    opt.querySelector('input').checked = true;
-    document.querySelectorAll('.grade-option').forEach(o => o.className = 'grade-option');
-    opt.className = `grade-option sel-${g}`;
-    save();
-  });
-});
-
-// ── PLAYBOOK TAGS ──────────────────────────────────────────
-document.querySelectorAll('.play-tag').forEach(tag => {
-  tag.addEventListener('click', () => { tag.classList.toggle('active'); save(); });
-});
-
-// ── SAVE / RESTORE ─────────────────────────────────────────
-function save() {
-  const state = { date: today, awareness:[], watchlist:[], temp:[], final:[], tickers:'', playNotes:'', playbookNotes:'', grade:'', plays:[] };
-  ['awareness-list','watchlist-list','temp-list','final-list'].forEach((id,i) => {
-    const key = ['awareness','watchlist','temp','final'][i];
-    document.querySelectorAll(`#${id} li`).forEach((li,j) => { if(li.classList.contains('checked')) state[key].push(j); });
-  });
-  state.tickers = document.getElementById('tickers').value;
-  state.playNotes = document.getElementById('playNotes').value;
-  state.playbookNotes = document.getElementById('playbookNotes').value;
-  const gradeEl = document.querySelector('.grade-option input:checked');
-  if (gradeEl) state.grade = gradeEl.value;
-  document.querySelectorAll('.play-tag.active').forEach(t => state.plays.push(t.dataset.play));
-  localStorage.setItem('preMarketPrep', JSON.stringify(state));
-}
-
-function restore() {
-  const saved = JSON.parse(localStorage.getItem('preMarketPrep') || '{}');
-  if (saved.date !== today) return;
-  ['awareness-list','watchlist-list','temp-list','final-list'].forEach((id,i) => {
-    const key = ['awareness','watchlist','temp','final'][i];
-    document.querySelectorAll(`#${id} li`).forEach((li,j) => { if(saved[key]?.includes(j)) li.classList.add('checked'); });
-  });
-  if (saved.tickers) document.getElementById('tickers').value = saved.tickers;
-  if (saved.playNotes) document.getElementById('playNotes').value = saved.playNotes;
-  if (saved.playbookNotes) document.getElementById('playbookNotes').value = saved.playbookNotes;
-  if (saved.grade) {
-    const opt = document.querySelector(`.grade-option[data-grade="${saved.grade}"]`);
-    if (opt) { opt.querySelector('input').checked = true; opt.className = `grade-option sel-${saved.grade}`; }
+// ── HERO CHART (animated SVG candlestick/line) ─────────────
+function drawHero() {
+  const svg = document.getElementById('heroChart');
+  const W=1200, H=220, pad=40;
+  // generate a plausible market line
+  const pts = [];
+  let y = 130;
+  for (let i=0; i<120; i++) {
+    y += (Math.random()-0.48)*6;
+    y = Math.max(60, Math.min(180, y));
+    pts.push([i*(W/(119)), y]);
   }
-  if (saved.plays) {
-    document.querySelectorAll('.play-tag').forEach(t => { if(saved.plays.includes(t.dataset.play)) t.classList.add('active'); });
-  }
-  updateProgress();
+  // area fill
+  const pathD = pts.map((p,i)=>(i===0?`M${p[0]},${p[1]}`:`L${p[0]},${p[1]}`)).join(' ');
+  const areaD = pathD + ` L${W},${H} L0,${H} Z`;
+  // grid lines
+  let grid='';
+  for (let i=1;i<5;i++) { const gy=i*(H/5); grid+=`<line x1="0" y1="${gy}" x2="${W}" y2="${gy}" stroke="#1e2730" stroke-width="1"/>`; }
+  for (let i=1;i<10;i++) { const gx=i*(W/10); grid+=`<line x1="${gx}" y1="0" x2="${gx}" y2="${H}" stroke="#1e2730" stroke-width="1"/>`; }
+  // last point dot
+  const lp=pts[pts.length-1];
+  const isUp = pts[pts.length-1][1] < pts[0][1];
+  const lineColor = isUp ? '#00c896' : '#f05050';
+  const fillColor = isUp ? '#00c89608' : '#f0505008';
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="heroGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="${lineColor}" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    ${grid}
+    <path d="${areaD}" fill="url(#heroGrad)"/>
+    <path d="${pathD}" fill="none" stroke="${lineColor}" stroke-width="1.5" filter="url(#glow)" opacity="0.9"/>
+    <circle cx="${lp[0]}" cy="${lp[1]}" r="4" fill="${lineColor}" opacity="0.9"/>
+    <circle cx="${lp[0]}" cy="${lp[1]}" r="8" fill="${lineColor}" opacity="0.2"/>
+  `;
 }
+drawHero();
 
-document.querySelectorAll('textarea').forEach(el => { el.addEventListener('input', save); });
-restore();
+// ── MINI CHART ─────────────────────────────────────────────
+function drawMini() {
+  const svg = document.getElementById('miniChart');
+  const W=280, H=60;
+  const pts=[];
+  let y=35;
+  for(let i=0;i<50;i++){
+    y+=(Math.random()-0.47)*4;
+    y=Math.max(8,Math.min(52,y));
+    pts.push([i*(W/49),y]);
+  }
+  const pathD=pts.map((p,i)=>(i===0?`M${p[0]},${p[1]}`:`L${p[0]},${p[1]}`)).join(' ');
+  const areaD=pathD+` L${W},${H} L0,${H} Z`;
+  const isUp=pts[pts.length-1][1]<pts[0][1];
+  const c=isUp?'#00c896':'#f05050';
+  svg.innerHTML=`
+    <defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${c}" stop-opacity="0.2"/><stop offset="100%" stop-color="${c}" stop-opacity="0"/></linearGradient></defs>
+    <path d="${areaD}" fill="url(#mg)"/>
+    <path d="${pathD}" fill="none" stroke="${c}" stroke-width="1.2"/>
+  `;
+}
+drawMini();
+
+// ── MARKET DATA ─────────────────────────────────────────────
+async function loadMarketData() {
+  try {
+    const resp = await fetch('market-data.json');
+    const data = await resp.json();
+    const fmt = n => n?.toLocaleString() ?? '—';
+    const pct = n => (n>=0?'+':'')+(n?.toFixed(2)??'—')+'%';
+    const cls = n => n>0?'up':n<0?'down':'flat';
+
+    const set = (id, val, chgId, chg) => {
+      document.getElementById(id).textContent = fmt(val);
+      const el = document.getElementById(chgId);
+      el.textContent = pct(chg);
+      el.className = 'index-chg '+cls(chg);
+    };
+    set('dow-val', data.indices?.dow?.value, 'dow-chg', data.indices?.dow?.change);
+    set('sp-val',  data.indices?.sp500?.value, 'sp-chg', data.indices?.sp500?.change);
+    set('nq-val',  data.indices?.nasdaq?.value, 'nq-chg', data.indices?.nasdaq?.change);
+
+    const fg = data.fearGreed?.value ?? 50;
+    const fgLabel = data.fearGreed?.label ?? '—';
+    document.getElementById('fg-num').textContent = fg;
+    const fgLbl = document.getElementById('fg-lbl');
+    fgLbl.textContent = fgLabel;
+    fgLbl.className = 'index-chg ' + (fg<30?'down':fg>70?'up':'flat');
+
+    const fill = document.getElementById('fg-fill');
+    fill.style.width = fg+'%';
+    fill.style.background = fg<25?'#f05050':fg<45?'#f0a500':fg<55?'#556070':fg<75?'#4da6ff':'#00c896';
+    document.getElementById('fg-pct').textContent = fg;
+    document.getElementById('fg-txt').textContent = fgLabel + ' is driving the market';
+
+    const news = data.news ?? [];
+    document.getElementById('newsList').innerHTML = news.length
+      ? news.map(n=>`<div class="news-item"><span>${n}</span></div>`).join('')
+      : '<div class="news-loading">No news items found.</div>';
+  } catch(e) {
+    console.error('Market data error', e);
+  }
+}
+loadMarketData();
+
+// ── BRIEF LOADER ────────────────────────────────────────────
+async function loadBrief(date) {
+  const content = document.getElementById('briefContent');
+  content.innerHTML = '<div class="brief-loading">Loading brief...</div>';
+  try {
+    const response = await fetch(`briefs/${date}-brief.md`);
+    if (!response.ok) throw new Error('Not found');
+    const text = await response.text();
+    let html = text
+      .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+      .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+      .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,'<em>$1</em>')
+      .replace(/^- (.+)$/gm,'<li>$1</li>')
+      .replace(/(<li>.*<\/li>\n?)+/g, m=>`<ul>${m}</ul>`)
+      .replace(/^---$/gm,'<hr>')
+      .replace(/\n\n/g,'</p><p>');
+    content.innerHTML = `<p>${html}</p>`;
+  } catch(e) {
+    content.innerHTML = `<div class="brief-error">No brief found for ${date}.<br><span style="color:var(--muted);font-size:0.7rem;">Expected: briefs/${date}-brief.md</span></div>`;
+  }
+}
+loadBrief(isoDate);
 </script>
 </body>
 </html>
