@@ -1,162 +1,514 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Brief</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1a1a2e;
-            color: #eee;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: #00d4ff;
-        }
-        .subtitle { color: #888; margin-bottom: 2rem; }
-        .date-nav {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        .date-btn {
-            background: #16213e;
-            border: 1px solid #0f3460;
-            color: #00d4ff;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-        .date-btn:hover { background: #0f3460; }
-        .date-btn.active { background: #00d4ff; color: #1a1a2e; }
-        .brief-content {
-            background: #16213e;
-            border-radius: 8px;
-            padding: 2rem;
-            border: 1px solid #0f3460;
-        }
-        .brief-content h2 { color: #00d4ff; margin: 1.5rem 0 0.5rem; }
-        .brief-content h2:first-child { margin-top: 0; }
-        .brief-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        .brief-content th, .brief-content td {
-            padding: 0.5rem;
-            text-align: left;
-            border-bottom: 1px solid #0f3460;
-        }
-        .brief-content th { color: #00d4ff; }
-        .brief-content ul { margin-left: 1.5rem; }
-        .brief-content li { margin: 0.25rem 0; }
-        .brief-content hr { border: none; border-top: 1px solid #0f3460; margin: 1.5rem 0; }
-        .loading { text-align: center; padding: 2rem; color: #888; }
-        .error { color: #ff6b6b; text-align: center; padding: 2rem; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morning Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080b0f;
+  --surface: #0e1318;
+  --surface2: #141b22;
+  --border: #1e2730;
+  --border2: #2a3540;
+  --text: #d4dde6;
+  --muted: #556070;
+  --dim: #2e3d4a;
+  --green: #00c896;
+  --green-dim: #00c89620;
+  --green-glow: #00c89640;
+  --amber: #f0a500;
+  --amber-dim: #f0a50018;
+  --red: #f05050;
+  --red-dim: #f0505018;
+  --blue: #4da6ff;
+  --blue-dim: #4da6ff15;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-nav { display: flex; gap: 1.5rem; align-items: center; }
+.topbar-nav a {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--muted);
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.topbar-nav a.active { color: var(--green); background: var(--green-dim); }
+.topbar-nav a:hover:not(.active) { color: var(--text); }
+.topbar-center { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.topbar-title { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em; color: var(--text); text-transform: uppercase; }
+.topbar-date { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; }
+.countdown-wrap { display: flex; align-items: center; gap: 0.5rem; }
+.countdown-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.countdown { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; color: var(--green); background: var(--green-dim); padding: 0.2rem 0.6rem; border-radius: 3px; border: 1px solid var(--green-glow); min-width: 80px; text-align: center; transition: color 0.3s, background 0.3s; }
+.countdown.market-open { color: var(--amber); background: var(--amber-dim); border-color: var(--amber); }
+.countdown.post-market { color: var(--muted); background: var(--surface2); border-color: var(--border); }
+
+/* HERO CHART */
+.hero {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.hero-svg { width: 100%; height: 100%; display: block; }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(to top, rgba(8,11,15,0.85) 0%, rgba(8,11,15,0.2) 60%, transparent 100%);
+}
+.hero-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 0.25rem;
+}
+.hero-title {
+  font-family: var(--mono);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.04em;
+}
+.hero-sub {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+/* INDICES STRIP */
+.indices-strip {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  overflow-x: auto;
+}
+.index-cell {
+  flex: 1;
+  min-width: 140px;
+  padding: 0.85rem 1.25rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fadeUp 0.4s ease both;
+}
+.index-cell:last-child { border-right: none; }
+.index-cell:nth-child(1) { animation-delay: 0.05s; }
+.index-cell:nth-child(2) { animation-delay: 0.1s; }
+.index-cell:nth-child(3) { animation-delay: 0.15s; }
+.index-cell:nth-child(4) { animation-delay: 0.2s; }
+.index-name { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.index-val { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--text); }
+.index-chg { font-family: var(--mono); font-size: 0.72rem; font-weight: 500; }
+.index-chg.up { color: var(--green); }
+.index-chg.down { color: var(--red); }
+.index-chg.flat { color: var(--muted); }
+
+/* FEAR & GREED */
+.fg-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.fg-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.fg-bar-outer { flex: 1; height: 4px; background: var(--dim); border-radius: 2px; overflow: hidden; }
+.fg-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+.fg-value { font-family: var(--mono); font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+.fg-text { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); white-space: nowrap; min-width: 100px; }
+
+/* MAIN LAYOUT */
+.main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 2rem; display: grid; grid-template-columns: 1fr 320px; gap: 1.25rem; }
+
+@media (max-width: 800px) {
+  .main { grid-template-columns: 1fr; padding: 1rem; }
+  .topbar { padding: 0.75rem 1rem; }
+  .hero-overlay { padding: 1rem; }
+  .hero-title { font-size: 1.2rem; }
+}
+
+/* BRIEF CARD */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  animation: fadeUp 0.4s ease both;
+}
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.15s; }
+.card:nth-child(3) { animation-delay: 0.2s; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.card-title { font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); }
+.card-badge { font-family: var(--mono); font-size: 0.6rem; color: var(--green); background: var(--green-dim); padding: 0.15rem 0.5rem; border-radius: 3px; border: 1px solid var(--green-glow); letter-spacing: 0.06em; }
+.card-body { padding: 1.25rem; }
+
+/* BRIEF CONTENT */
+.brief-content { font-size: 0.875rem; line-height: 1.75; color: var(--text); }
+.brief-content h1 { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--text); margin: 1.25rem 0 0.5rem; letter-spacing: 0.04em; }
+.brief-content h2 { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; margin: 1.25rem 0 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
+.brief-content h3 { font-family: var(--mono); font-size: 0.75rem; font-weight: 500; color: var(--blue); letter-spacing: 0.08em; text-transform: uppercase; margin: 1rem 0 0.35rem; }
+.brief-content h2:first-child, .brief-content h1:first-child { margin-top: 0; }
+.brief-content p { margin-bottom: 0.75rem; color: var(--text); }
+.brief-content strong { font-weight: 600; color: var(--text); }
+.brief-content em { color: var(--muted); font-style: italic; }
+.brief-content ul { margin: 0.5rem 0 0.75rem 0; display: flex; flex-direction: column; gap: 4px; }
+.brief-content li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.83rem; line-height: 1.55; }
+.brief-content li::before { content: '›'; color: var(--green); font-family: var(--mono); flex-shrink: 0; margin-top: 1px; }
+.brief-content hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+.brief-content table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.8rem; }
+.brief-content th { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); text-align: left; }
+.brief-content td { padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); color: var(--text); }
+.brief-content tr:last-child td { border-bottom: none; }
+.brief-loading { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); padding: 2rem; text-align: center; letter-spacing: 0.05em; }
+.brief-error { font-family: var(--mono); font-size: 0.75rem; color: var(--red); padding: 2rem; text-align: center; }
+
+/* NEWS SIDEBAR */
+.news-list { display: flex; flex-direction: column; gap: 1px; }
+.news-item {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.news-item:last-child { border-bottom: none; }
+.news-item::before { content: '›'; color: var(--green); font-family: var(--mono); flex-shrink: 0; margin-top: 1px; }
+.news-loading { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); padding: 1rem 0; text-align: center; }
+
+/* MINI CHART in sidebar */
+.mini-chart-wrap { padding: 0.75rem 1.25rem 0; }
+.mini-chart-svg { width: 100%; height: 60px; display: block; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav style="margin-bottom:1.5rem;">
-            <a href="prep.html" style="color:#666;">Pre-Market Prep</a>
-        </nav>
-        
-        <!-- Market Ticker -->
-        <div style="background:#21262d;border-radius:8px;padding:1rem;margin-bottom:1.5rem;border:1px solid #30363d;">
-            <div style="display:flex;flex-wrap:wrap;gap:1.5rem;font-size:0.85rem;margin-bottom:0.75rem;">
-                <span id="dow"><strong>DOW</strong> <span class="loading">Loading...</span></span>
-                <span id="sp500"><strong>S&P 500</strong> <span class="loading">...</span></span>
-                <span id="nasdaq"><strong>NASDAQ</strong> <span class="loading">...</span></span>
-            </div>
-            <div style="border-top:1px solid #30363d;padding-top:0.75rem;font-size:0.8rem;">
-                <strong>Fear & Greed Index:</strong> <span id="fgValue">--</span> <span id="fgLabel">Loading...</span> is driving the US market
-            </div>
-        </div>
-        
-        <h1>Morning Brief</h1>
-        
-        <!-- Date picker removed per user request -->
-        
-        <div class="brief-content" id="briefContent">
-            <p class="loading">Loading...</p>
-        </div>
-        
-        <div style="margin-top:1.5rem;background:#21262d;border-radius:8px;padding:1rem;border:1px solid #30363d;">
-            <h3 style="color:#00d4ff;margin-bottom:0.75rem;">Latest Market News</h3>
-            <ul id="newsListBottom" style="margin-left:1rem;"><li>Loading...</li></ul>
-        </div>
-        
-        <p class="subtitle" id="currentDate" style="margin-top:2rem;"></p>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <nav class="topbar-nav">
+    <a href="index.html" class="active">Morning Brief</a>
+    <a href="prep.html">Pre-Market Prep</a>
+  </nav>
+  <div class="topbar-center">
+    <div class="topbar-title">Morning Brief</div>
+    <div class="topbar-date" id="currentDate"></div>
+  </div>
+  <div class="countdown-wrap">
+    <div class="countdown-label">Open in</div>
+    <div class="countdown" id="countdown">--:--:--</div>
+  </div>
+</div>
+
+<!-- HERO CHART -->
+<div class="hero">
+  <svg class="hero-svg" id="heroChart" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="hero-overlay">
+    <div class="hero-label">NYSE · NASDAQ · Pre-Market</div>
+    <div class="hero-title">Morning Brief</div>
+    <div class="hero-sub">What is in play today — not a prediction, a preparation.</div>
+  </div>
+</div>
+
+<!-- INDICES -->
+<div class="indices-strip">
+  <div class="index-cell">
+    <div class="index-name">DOW</div>
+    <div class="index-val" id="dow-val">—</div>
+    <div class="index-chg flat" id="dow-chg">—</div>
+  </div>
+  <div class="index-cell">
+    <div class="index-name">S&amp;P 500</div>
+    <div class="index-val" id="sp-val">—</div>
+    <div class="index-chg flat" id="sp-chg">—</div>
+  </div>
+  <div class="index-cell">
+    <div class="index-name">NASDAQ</div>
+    <div class="index-val" id="nq-val">—</div>
+    <div class="index-chg flat" id="nq-chg">—</div>
+  </div>
+  <div class="index-cell">
+    <div class="index-name">Fear &amp; Greed</div>
+    <div class="index-val" id="fg-num">—</div>
+    <div class="index-chg flat" id="fg-lbl">—</div>
+  </div>
+</div>
+
+<!-- F&G BAR -->
+<div class="fg-bar-wrap">
+  <div class="fg-label">Fear &amp; Greed</div>
+  <div class="fg-bar-outer"><div class="fg-bar-fill" id="fg-fill" style="width:0%; background: var(--muted);"></div></div>
+  <div class="fg-value" id="fg-pct">—</div>
+  <div class="fg-text" id="fg-txt">Loading...</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- BRIEF -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-title">Today's Brief</span>
+      <span class="card-badge" id="brief-date-badge">—</span>
+    </div>
+    <div class="card-body">
+      <div class="brief-content" id="briefContent">
+        <div class="brief-loading">Loading brief...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div style="display:flex; flex-direction:column; gap:1.25rem;">
+
+    <!-- MINI CHART -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">S&amp;P 500 — Intraday</span>
+        <span class="card-badge">Live</span>
+      </div>
+      <div class="mini-chart-wrap">
+        <svg class="mini-chart-svg" id="miniChart" viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="card-body" style="padding-top:0.5rem;">
+        <div style="font-family:var(--mono); font-size:0.62rem; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase;">Simulated pre-market pattern</div>
+      </div>
     </div>
 
-    <script>
-        // Fetch market data
-        async function loadMarketData() {
-            try {
-                const resp = await fetch('market-data.json');
-                const data = await resp.json();
-                
-                const fmt = (n) => n?.toLocaleString() ?? '--';
-                const pct = (n) => (n >= 0 ? '+' : '') + (n?.toFixed(2) ?? '--') + '%';
-                const color = (n) => n >= 0 ? '#3fb950' : '#f85149';
-                
-                document.getElementById('dow').innerHTML = `<strong>DOW</strong> ${fmt(data.indices?.dow?.value)} <span style="color:${color(data.indices?.dow?.change)}">${pct(data.indices?.dow?.change)}</span>`;
-                document.getElementById('sp500').innerHTML = `<strong>S&P 500</strong> ${fmt(data.indices?.sp500?.value)} <span style="color:${color(data.indices?.sp500?.change)}">${pct(data.indices?.sp500?.change)}</span>`;
-                document.getElementById('nasdaq').innerHTML = `<strong>NASDAQ</strong> ${fmt(data.indices?.nasdaq?.value)} <span style="color:${color(data.indices?.nasdaq?.change)}">${pct(data.indices?.nasdaq?.change)}</span>`;
-                
-                document.getElementById('fgValue').textContent = data.fearGreed?.value ?? '--';
-                const fgLabel = document.getElementById('fgLabel');
-                fgLabel.textContent = data.fearGreed?.label ?? '--';
-                fgLabel.style.color = data.fearGreed?.value < 30 ? '#f85149' : data.fearGreed?.value > 70 ? '#3fb950' : '#d29922';
-                
-                const news = data.news ?? [];
-                document.getElementById('newsList').innerHTML = news.map(n => `<li>${n}</li>`).join('');
-                document.getElementById('newsListBottom').innerHTML = news.map(n => `<li>${n}</li>`).join('');
-            } catch (e) {
-                console.error('Failed to load market data', e);
-            }
-        }
-        loadMarketData();
-        
-        // Set current date at bottom
-        document.getElementById('currentDate').textContent = new Date().toISOString().split('T')[0];
-        
-        const briefsPath = 'briefs/';
-        
-        async function loadBrief(date) {
-            const content = document.getElementById('briefContent');
-            content.innerHTML = '<p class="loading">Loading...</p>';
-            
-            try {
-                const response = await fetch(`${briefsPath}${date}-brief.md`);
-                if (!response.ok) throw new Error('Brief not found');
-                const text = await response.text();
-                
-                // Convert markdown to HTML (basic)
-                let html = text
-                    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-                    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-                    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-                    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-                    .replace(/^- \[ \] (.+)$/gm, '<li>[ ] $1</li>')
-                    .replace(/^- \[x\] (.+)$/gm, '<li>[✓] $1</li>')
-                    .replace(/^- (.+)$/gm, '<li>$1</li>')
-                    .replace(/\n\n/g, '</p><p>')
-                    .replace(/\|/g, '');
-                
-                content.innerHTML = `<p>${html}</p>`;
-            } catch (e) {
-                content.innerHTML = `<p class="error">No brief found for ${date}</p>`;
-            }
-        }
-        
-        // Load today's brief
-        loadBrief(new Date().toISOString().split('T')[0]);
-    </script>
+    <!-- NEWS -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Latest News</span>
+        <span class="card-badge">Today</span>
+      </div>
+      <div class="card-body">
+        <div class="news-list" id="newsList">
+          <div class="news-loading">Loading news...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── DATE ───────────────────────────────────────────────────
+const todayStr = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+const isoDate = new Date().toISOString().split('T')[0];
+document.getElementById('currentDate').textContent = todayStr;
+document.getElementById('brief-date-badge').textContent = isoDate;
+
+// ── COUNTDOWN ──────────────────────────────────────────────
+function pad(n) { return String(n).padStart(2,'0'); }
+function updateCountdown() {
+  const now = new Date();
+  const et = new Date(now.toLocaleString('en-US', { timeZone:'America/New_York' }));
+  const open = new Date(et); open.setHours(9,30,0,0);
+  const close = new Date(et); close.setHours(16,0,0,0);
+  const el = document.getElementById('countdown');
+  const day = et.getDay();
+  if (day===0||day===6) { el.textContent='WEEKEND'; el.className='countdown post-market'; return; }
+  if (et>=open && et<=close) {
+    const d=close-et, h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000), s=Math.floor((d%60000)/1000);
+    el.textContent=`OPEN ${pad(h)}:${pad(m)}:${pad(s)}`; el.className='countdown market-open'; return;
+  }
+  if (et>close) { el.textContent='CLOSED'; el.className='countdown post-market'; return; }
+  const d=open-et, h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000), s=Math.floor((d%60000)/1000);
+  el.textContent=`${pad(h)}:${pad(m)}:${pad(s)}`; el.className='countdown';
+}
+updateCountdown(); setInterval(updateCountdown,1000);
+
+// ── HERO CHART (animated SVG candlestick/line) ─────────────
+function drawHero() {
+  const svg = document.getElementById('heroChart');
+  const W=1200, H=220, pad=40;
+  // generate a plausible market line
+  const pts = [];
+  let y = 130;
+  for (let i=0; i<120; i++) {
+    y += (Math.random()-0.48)*6;
+    y = Math.max(60, Math.min(180, y));
+    pts.push([i*(W/(119)), y]);
+  }
+  // area fill
+  const pathD = pts.map((p,i)=>(i===0?`M${p[0]},${p[1]}`:`L${p[0]},${p[1]}`)).join(' ');
+  const areaD = pathD + ` L${W},${H} L0,${H} Z`;
+  // grid lines
+  let grid='';
+  for (let i=1;i<5;i++) { const gy=i*(H/5); grid+=`<line x1="0" y1="${gy}" x2="${W}" y2="${gy}" stroke="#1e2730" stroke-width="1"/>`; }
+  for (let i=1;i<10;i++) { const gx=i*(W/10); grid+=`<line x1="${gx}" y1="0" x2="${gx}" y2="${H}" stroke="#1e2730" stroke-width="1"/>`; }
+  // last point dot
+  const lp=pts[pts.length-1];
+  const isUp = pts[pts.length-1][1] < pts[0][1];
+  const lineColor = isUp ? '#00c896' : '#f05050';
+  const fillColor = isUp ? '#00c89608' : '#f0505008';
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="heroGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="${lineColor}" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    ${grid}
+    <path d="${areaD}" fill="url(#heroGrad)"/>
+    <path d="${pathD}" fill="none" stroke="${lineColor}" stroke-width="1.5" filter="url(#glow)" opacity="0.9"/>
+    <circle cx="${lp[0]}" cy="${lp[1]}" r="4" fill="${lineColor}" opacity="0.9"/>
+    <circle cx="${lp[0]}" cy="${lp[1]}" r="8" fill="${lineColor}" opacity="0.2"/>
+  `;
+}
+drawHero();
+
+// ── MINI CHART ─────────────────────────────────────────────
+function drawMini() {
+  const svg = document.getElementById('miniChart');
+  const W=280, H=60;
+  const pts=[];
+  let y=35;
+  for(let i=0;i<50;i++){
+    y+=(Math.random()-0.47)*4;
+    y=Math.max(8,Math.min(52,y));
+    pts.push([i*(W/49),y]);
+  }
+  const pathD=pts.map((p,i)=>(i===0?`M${p[0]},${p[1]}`:`L${p[0]},${p[1]}`)).join(' ');
+  const areaD=pathD+` L${W},${H} L0,${H} Z`;
+  const isUp=pts[pts.length-1][1]<pts[0][1];
+  const c=isUp?'#00c896':'#f05050';
+  svg.innerHTML=`
+    <defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${c}" stop-opacity="0.2"/><stop offset="100%" stop-color="${c}" stop-opacity="0"/></linearGradient></defs>
+    <path d="${areaD}" fill="url(#mg)"/>
+    <path d="${pathD}" fill="none" stroke="${c}" stroke-width="1.2"/>
+  `;
+}
+drawMini();
+
+// ── MARKET DATA ─────────────────────────────────────────────
+async function loadMarketData() {
+  try {
+    const resp = await fetch('market-data.json');
+    const data = await resp.json();
+    const fmt = n => n?.toLocaleString() ?? '—';
+    const pct = n => (n>=0?'+':'')+(n?.toFixed(2)??'—')+'%';
+    const cls = n => n>0?'up':n<0?'down':'flat';
+
+    const set = (id, val, chgId, chg) => {
+      document.getElementById(id).textContent = fmt(val);
+      const el = document.getElementById(chgId);
+      el.textContent = pct(chg);
+      el.className = 'index-chg '+cls(chg);
+    };
+    set('dow-val', data.indices?.dow?.value, 'dow-chg', data.indices?.dow?.change);
+    set('sp-val',  data.indices?.sp500?.value, 'sp-chg', data.indices?.sp500?.change);
+    set('nq-val',  data.indices?.nasdaq?.value, 'nq-chg', data.indices?.nasdaq?.change);
+
+    const fg = data.fearGreed?.value ?? 50;
+    const fgLabel = data.fearGreed?.label ?? '—';
+    document.getElementById('fg-num').textContent = fg;
+    const fgLbl = document.getElementById('fg-lbl');
+    fgLbl.textContent = fgLabel;
+    fgLbl.className = 'index-chg ' + (fg<30?'down':fg>70?'up':'flat');
+
+    const fill = document.getElementById('fg-fill');
+    fill.style.width = fg+'%';
+    fill.style.background = fg<25?'#f05050':fg<45?'#f0a500':fg<55?'#556070':fg<75?'#4da6ff':'#00c896';
+    document.getElementById('fg-pct').textContent = fg;
+    document.getElementById('fg-txt').textContent = fgLabel + ' is driving the market';
+
+    const news = data.news ?? [];
+    document.getElementById('newsList').innerHTML = news.length
+      ? news.map(n=>`<div class="news-item"><span>${n}</span></div>`).join('')
+      : '<div class="news-loading">No news items found.</div>';
+  } catch(e) {
+    console.error('Market data error', e);
+  }
+}
+loadMarketData();
+
+// ── BRIEF LOADER ────────────────────────────────────────────
+async function loadBrief(date) {
+  const content = document.getElementById('briefContent');
+  content.innerHTML = '<div class="brief-loading">Loading brief...</div>';
+  try {
+    const response = await fetch(`briefs/${date}-brief.md`);
+    if (!response.ok) throw new Error('Not found');
+    const text = await response.text();
+    let html = text
+      .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+      .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+      .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,'<em>$1</em>')
+      .replace(/^- (.+)$/gm,'<li>$1</li>')
+      .replace(/(<li>.*<\/li>\n?)+/g, m=>`<ul>${m}</ul>`)
+      .replace(/^---$/gm,'<hr>')
+      .replace(/\n\n/g,'</p><p>');
+    content.innerHTML = `<p>${html}</p>`;
+  } catch(e) {
+    content.innerHTML = `<div class="brief-error">No brief found for ${date}.<br><span style="color:var(--muted);font-size:0.7rem;">Expected: briefs/${date}-brief.md</span></div>`;
+  }
+}
+loadBrief(isoDate);
+</script>
 </body>
 </html>
