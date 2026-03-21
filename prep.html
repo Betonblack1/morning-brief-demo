@@ -171,20 +171,28 @@ body::before {
 /* MAIN LAYOUT */
 .main {
   padding: 2rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-.card.wide {
-  grid-column: 1 / -1;
+.main-top {
+  width: 100%;
 }
 
-@media (max-width: 768px) {
-  .main { grid-template-columns: 1fr; }
-  .card.wide { grid-column: 1; }
+.main-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 1100px) {
+  .main-bottom { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .main-bottom { grid-template-columns: 1fr; }
 }
 
 /* CARDS */
@@ -588,6 +596,8 @@ body::before {
 
 <!-- CARDS GRID -->
 <div class="main">
+  <!-- Top: Playbook full width -->
+  <div class="main-top">
 
   <!-- CARD 1: Market Awareness -->
   <div class="card">
@@ -899,10 +909,10 @@ body::before {
         <textarea class="field-input" id="playbookNotes" placeholder="What setups are lining up and why..."></textarea>
       </div>
     </div>
-  </div>
+  </div><!-- /main-top -->
 
-  <!-- CARD 5: Final Check -->
-  <div class="card">
+  <!-- Bottom: 4 cards -->
+  <div class="main-bottom">
     <div class="card-head">
       <span class="card-time">9:25 AM</span>
       <span class="card-title">Final Check Before Open</span>
@@ -923,7 +933,7 @@ body::before {
     </div>
   </div>
 
-</div><!-- /main -->
+</div><!-- /main-bottom -->
 
 <script>
 const today = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
