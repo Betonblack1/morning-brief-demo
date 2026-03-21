@@ -1,17 +1,1 @@
-{
-  "updated": "2026-03-17T18:00:00Z",
-  "indices": {
-    "dow": { "value": 46993.26, "change": 0.10 },
-    "sp500": { "value": 6716.09, "change": 0.25 },
-    "nasdaq": { "value": 22479.53, "change": 0.47 }
-  },
-  "fearGreed": {
-    "value": 21,
-    "label": "Extreme Fear"
-  },
-  "news": [
-    "Judge orders Voice of America staff reinstated, reversing Trump's shutdown",
-    "The other trade chokepoint at risk from the Iran war",
-    "Oil prices jump as Iran warns Strait of Hormuz 'cannot be the same'"
-  ]
-}
+{"updated":"2026-03-20","indices":{"dow":{"value":45576.83,"change":-0.97},"sp500":{"value":6586.50,"change":-1.10},"nasdaq":{"value":24206.50,"change":-1.52}},"fearGreed":{"value":28,"label":"Extreme Fear"},"news":["Treasury yields climb as bonds sell off and fear grows that Fed rate cuts are off the table","Goldman sees risks of market correction rising — and bonds won't help weather it","Oil prices top $112 after Iraq declares force majeure, Kuwait refineries attacked"]}

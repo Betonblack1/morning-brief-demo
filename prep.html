@@ -26,21 +26,41 @@
         .subtitle { color: #8b949e; font-size: 0.9rem; margin-bottom: 2rem; }
         
         .cards-container {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            overflow-x: auto;
-            padding-bottom: 1rem;
-            scroll-snap-type: x mandatory;
+            max-width: 1400px;
+            margin: 0 auto;
         }
         
         .card {
-            flex: 0 0 auto;
-            width: 320px;
             background: #161b22;
             border: 1px solid #30363d;
             border-radius: 8px;
             padding: 1.25rem;
-            scroll-snap-align: start;
+        }
+        
+        .cards-row {
+            display: contents;
+        }
+        
+        .card.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .cards-bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 900px) {
+            .cards-container,
+            .cards-bottom {
+                grid-template-columns: 1fr;
+            }
         }
         
         .card-header {
@@ -164,7 +184,23 @@
         <div class="date" id="currentDate"></div>
     </div>
     
-    <div class="cards-container">
+    <!-- Top row: Playbook full width -->
+    <div class="card full-width" style="margin-bottom:1rem;">
+        <div class="card-header">
+            <span class="card-time">9:25 AM</span>
+        </div>
+        <div class="card-title">Final Check Before Open — Playbook</div>
+        <ul class="checklist" id="final-list">
+            <li>All alerts are set — no excuses to miss a move</li>
+            <li>Risk sizing confirmed based on today's grade</li>
+            <li>Not committed to any ticker or sector — ready to react</li>
+            <li>What is in play today that I should watch?</li>
+        </ul>
+        <textarea class="tickers-input" id="playNotes" placeholder="Notes: what looks set up today..." style="margin-top:1rem;"></textarea>
+    </div>
+    
+    <!-- Bottom row: 3 cards -->
+    <div class="cards-bottom">
         <!-- Card 1: Market Awareness -->
         <div class="card">
             <div class="card-header">
@@ -229,21 +265,6 @@
                     <span class="grade-f">F = No trade</span>
                 </div>
             </div>
-        </div>
-        
-        <!-- Card 4: Final Check -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-time">9:25 AM</span>
-            </div>
-            <div class="card-title">Final Check Before Open</div>
-            <ul class="checklist" id="final-list">
-                <li>All alerts are set — no excuses to miss a move</li>
-                <li>Risk sizing confirmed based on today's grade</li>
-                <li>Not committed to any ticker or sector — ready to react</li>
-                <li>What is in play today that I should watch?</li>
-            </ul>
-            <textarea class="tickers-input" id="playNotes" placeholder="Notes: what looks set up today..." style="margin-top:1rem;"></textarea>
         </div>
     </div>
 
