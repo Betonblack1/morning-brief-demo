@@ -1,341 +1,1120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre-Market Prep</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0d1117;
-            color: #c9d1d9;
-            min-height: 100vh;
-            padding: 1rem;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #21262d;
-        }
-        h1 { font-size: 1.5rem; color: #58a6ff; }
-        .date { color: #8b949e; }
-        .subtitle { color: #8b949e; font-size: 0.9rem; margin-bottom: 2rem; }
-        
-        .cards-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .card {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            padding: 1.25rem;
-        }
-        
-        .cards-row {
-            display: contents;
-        }
-        
-        .card.full-width {
-            grid-column: 1 / -1;
-        }
-        
-        .cards-bottom {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 1rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        @media (max-width: 900px) {
-            .cards-container,
-            .cards-bottom {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .card-time {
-            background: #238636;
-            color: #fff;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .card-title {
-            color: #58a6ff;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        
-        .checklist { list-style: none; }
-        .checklist li {
-            padding: 0.4rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-            font-size: 0.85rem;
-            border-bottom: 1px solid #21262d;
-        }
-        .checklist li:last-child { border-bottom: none; }
-        .checklist li::before {
-            content: '☐';
-            position: absolute;
-            left: 0;
-            color: #58a6ff;
-        }
-        .checklist li.checked::before { content: '☑'; }
-        .checklist li.checked { color: #3fb950; }
-        
-        .tickers-input {
-            width: 100%;
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 4px;
-            padding: 0.5rem;
-            color: #c9d1d9;
-            font-family: monospace;
-            font-size: 0.85rem;
-            resize: vertical;
-            min-height: 60px;
-        }
-        
-        .temp-check {
-            margin-top: 0.5rem;
-        }
-        
-        .temp-check label {
-            display: block;
-            padding: 0.5rem;
-            margin: 0.25rem 0;
-            background: #21262d;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-        .temp-check input { margin-right: 0.5rem; }
-        
-        .grade-display {
-            text-align: center;
-            padding: 1rem;
-            background: #238636;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 2rem;
-            font-weight: bold;
-            margin-top: 1rem;
-            display: none;
-        }
-        .grade-display.show { display: block; }
-        
-        .sizing-guide {
-            margin-top: 1rem;
-            padding: 0.75rem;
-            background: #21262d;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-        
-        .sizing-legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        .sizing-legend span {
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-        }
-        .grade-a { background: #238636; color: #fff; }
-        .grade-b { background: #58a6ff; color: #fff; }
-        .grade-c { background: #d29922; color: #fff; }
-        .grade-d { background: #f85149; color: #fff; }
-        .grade-f { background: #8b0000; color: #fff; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-Market Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080b0f;
+  --surface: #0e1318;
+  --surface2: #141b22;
+  --border: #1e2730;
+  --border2: #2a3540;
+  --text: #d4dde6;
+  --muted: #556070;
+  --dim: #2e3d4a;
+  --green: #00c896;
+  --green-dim: #00c89620;
+  --green-glow: #00c89640;
+  --amber: #f0a500;
+  --amber-dim: #f0a50018;
+  --red: #f05050;
+  --red-dim: #f0505018;
+  --blue: #4da6ff;
+  --blue-dim: #4da6ff15;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* scanline texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar-nav { display: flex; gap: 1.5rem; align-items: center; }
+.topbar-nav a {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--muted);
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.topbar-nav a.active { color: var(--green); background: var(--green-dim); }
+.topbar-nav a:hover:not(.active) { color: var(--text); }
+
+.topbar-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.topbar-title {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.topbar-date {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* COUNTDOWN TIMER */
+.countdown-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.countdown-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.countdown {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--green);
+  background: var(--green-dim);
+  padding: 0.2rem 0.6rem;
+  border-radius: 3px;
+  border: 1px solid var(--green-glow);
+  min-width: 80px;
+  text-align: center;
+  transition: color 0.3s, background 0.3s;
+}
+.countdown.market-open { color: var(--amber); background: var(--amber-dim); border-color: var(--amber); }
+.countdown.post-market { color: var(--muted); background: var(--surface2); border-color: var(--border); }
+
+/* PROGRESS BAR */
+.progress-section {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.progress-bar-outer {
+  flex: 1;
+  height: 3px;
+  background: var(--dim);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+  width: 0%;
+  box-shadow: 0 0 8px var(--green-glow);
+}
+.progress-stats {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  white-space: nowrap;
+  display: flex;
+  gap: 1.5rem;
+}
+.progress-stats .pct {
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* MAIN LAYOUT */
+.main {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.card.wide {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+  .main { grid-template-columns: 1fr; }
+  .card.wide { grid-column: 1; }
+}
+
+/* CARDS */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s;
+  animation: fadeUp 0.4s ease both;
+}
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.1s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+.card:nth-child(4) { animation-delay: 0.2s; }
+.card:nth-child(5) { animation-delay: 0.25s; }
+.card:hover { border-color: var(--border2); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.card-time {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  background: var(--green-dim);
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  border: 1px solid var(--green-glow);
+}
+
+.card-title {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.card-progress-mini {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+.card-progress-mini span { color: var(--green); }
+
+.card-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 0.75rem; }
+
+/* CHECKLIST */
+.checklist { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text);
+  transition: background 0.1s, color 0.2s;
+  user-select: none;
+  position: relative;
+}
+.checklist li:hover { background: var(--surface2); }
+
+.check-box {
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+  font-size: 10px;
+  color: transparent;
+}
+.checklist li.checked .check-box {
+  background: var(--green);
+  border-color: var(--green);
+  color: #000;
+}
+.checklist li.checked .check-text {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--dim);
+}
+
+/* TEXTAREA */
+.field-label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+.field-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.6rem 0.7rem;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  resize: vertical;
+  min-height: 64px;
+  transition: border-color 0.15s;
+  line-height: 1.6;
+}
+.field-input:focus { outline: none; border-color: var(--green); }
+.field-input::placeholder { color: var(--dim); }
+
+/* GRADE SECTION */
+.grade-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.grade-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 0.8rem;
+}
+.grade-option:hover { background: var(--surface2); }
+.grade-option input { display: none; }
+.grade-letter {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.grade-desc { color: var(--muted); font-size: 0.78rem; line-height: 1.4; }
+
+.grade-option.sel-A { background: #00c89612; border-color: #00c89630; }
+.grade-option.sel-A .grade-letter { color: var(--green); }
+.grade-option.sel-A .grade-desc { color: #00c896aa; }
+.grade-option.sel-B { background: #4da6ff12; border-color: #4da6ff30; }
+.grade-option.sel-B .grade-letter { color: var(--blue); }
+.grade-option.sel-B .grade-desc { color: #4da6ffaa; }
+.grade-option.sel-C { background: #f0a50012; border-color: #f0a50030; }
+.grade-option.sel-C .grade-letter { color: var(--amber); }
+.grade-option.sel-C .grade-desc { color: #f0a500aa; }
+.grade-option.sel-D { background: #f0505012; border-color: #f0505030; }
+.grade-option.sel-D .grade-letter { color: var(--red); }
+.grade-option.sel-D .grade-desc { color: #f05050aa; }
+.grade-option.sel-F { background: #f0505020; border-color: #f0505050; }
+.grade-option.sel-F .grade-letter { color: var(--red); }
+.grade-option.sel-F .grade-desc { color: var(--red); }
+
+/* PLAYBOOK */
+.playbook-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.play-btn {
+  padding: 0.6rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #1a4a55;
+  font-family: var(--mono);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  background: #0d2a30;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.play-btn:hover { border-color: #2a7a8a; background: #0f3540; }
+.play-btn.active { border-color: #40c8dc; background: #0d3a45; box-shadow: 0 0 8px #40c8dc25; }
+.play-btn-top { display: flex; align-items: center; gap: 6px; }
+.play-num { font-family: var(--mono); font-size: 0.58rem; font-weight: 600; color: #3a8a9a; background: #071820; border: 1px solid #1a4a55; border-radius: 2px; padding: 0 4px; line-height: 1.7; flex-shrink: 0; }
+.play-btn.active .play-num { color: #40c8dc; border-color: #40c8dc50; }
+.play-name { font-size: 0.72rem; font-weight: 600; color: #7ecfdf; letter-spacing: 0.03em; }
+.play-btn.active .play-name { color: #b8f0f8; }
+.play-meta { display: flex; gap: 6px; align-items: center; }
+.play-win { font-family: var(--mono); font-size: 0.6rem; color: var(--green); }
+.play-diff { font-family: var(--mono); font-size: 0.58rem; color: var(--muted); }
+.play-dots { display: flex; gap: 2px; }
+.play-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--dim); }
+.play-dot.filled { background: #40c8dc; }
+
+/* PLAYBOOK DETAIL PANEL */
+.play-detail {
+  display: none;
+  background: #071820;
+  border: 1px solid #1a4a55;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-top: 2px;
+  animation: fadeUp 0.2s ease;
+}
+.play-detail.show { display: block; }
+.play-detail-title {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #40c8dc;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #1a4a55;
+}
+.play-section { margin-bottom: 0.75rem; }
+.play-section-label {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+.play-steps { display: flex; flex-direction: column; gap: 4px; }
+.play-step {
+  display: flex;
+  gap: 8px;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+.play-step-num {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #40c8dc;
+  background: #0d2a30;
+  border: 1px solid #1a4a55;
+  border-radius: 2px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.play-tags-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.play-pill {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  border: 1px solid #1a4a55;
+  color: #7ecfdf;
+  background: #0d2a30;
+}
+
+/* CALCULATOR */
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; align-items: end; }
+.calc-box { display: flex; flex-direction: column; gap: 4px; }
+.calc-label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.calc-input {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 0.45rem 0.5rem;
+  color: var(--text);
+  width: 100%;
+  transition: border-color 0.15s;
+  text-align: right;
+}
+.calc-input:focus { outline: none; border-color: #40c8dc; }
+.calc-input::placeholder { color: var(--dim); }
+.calc-results {
+  background: #071820;
+  border: 1px solid #1a4a55;
+  border-radius: 4px;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.calc-result-row { display: flex; justify-content: space-between; align-items: center; }
+.calc-result-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.calc-result-val { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--text); }
+.calc-result-val.pos { color: var(--green); }
+.calc-result-val.neg { color: var(--red); }
+.calc-result-val.neutral { color: #40c8dc; }
+
+/* RULE NOTE */
+.rule-note {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--muted);
+  padding: 0.5rem 0.75rem;
+  background: var(--surface2);
+  border-left: 2px solid var(--green-glow);
+  border-radius: 0 4px 4px 0;
+  line-height: 1.5;
+}
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 0.25rem 0; }
+
+/* MARKET STATUS STRIP */
+.status-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 0.5rem 2rem;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  overflow-x: auto;
+}
+.status-item { display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+.status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
+.status-dot.green { background: var(--green); box-shadow: 0 0 4px var(--green); }
+.status-dot.amber { background: var(--amber); }
+.status-dot.red { background: var(--red); }
+
+@media (max-width: 700px) {
+  .topbar { padding: 0.75rem 1rem; }
+  .main { padding: 1rem; grid-template-columns: 1fr; }
+  .progress-section { padding: 0.75rem 1rem; }
+  .status-strip { gap: 1rem; }
+}
+</style>
 </head>
 <body>
-    <div class="header">
-        <nav style="margin-bottom:1rem;">
-            <a href="index.html" style="color:#666;margin-right:1rem;">Morning Brief</a>
-            <a href="prep.html" style="color:#58a6ff;">Pre-Market Prep</a>
-        </nav>
-        <div style="text-align:center;flex:1;">
-            <h1 style="text-align:center;width:100%;">Pre-Market Prep</h1>
-            <p class="subtitle">Not predicting — just asking: what is in play today?</p>
-        </div>
-        <div class="date" id="currentDate"></div>
-    </div>
-    
-    <!-- Top row: Playbook full width -->
-    <div class="card full-width" style="margin-bottom:1rem;">
-        <div class="card-header">
-            <span class="card-time">9:25 AM</span>
-        </div>
-        <div class="card-title">Final Check Before Open — Playbook</div>
-        <ul class="checklist" id="final-list">
-            <li>All alerts are set — no excuses to miss a move</li>
-            <li>Risk sizing confirmed based on today's grade</li>
-            <li>Not committed to any ticker or sector — ready to react</li>
-            <li>What is in play today that I should watch?</li>
-        </ul>
-        <textarea class="tickers-input" id="playNotes" placeholder="Notes: what looks set up today..." style="margin-top:1rem;"></textarea>
-    </div>
-    
-    <!-- Bottom row: 3 cards -->
-    <div class="cards-bottom">
-        <!-- Card 1: Market Awareness -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-time">8:30 AM</span>
-            </div>
-            <div class="card-title">Market Awareness</div>
-            <ul class="checklist" id="awareness-list">
-                <li>Check overnight futures, pre-market movers, and macro news</li>
-                <li>Review prior day tickers — what followed through, what failed</li>
-                <li>Scan earnings releases and surprises</li>
-                <li>Note IPOs, secondaries, and lockup expirations</li>
-                <li>Review analyst upgrades and downgrades</li>
-                <li>Check macro events: Fed speakers, CPI, jobs data, etc.</li>
-            </ul>
-        </div>
-        
-        <!-- Card 2: Watch List Build -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-time">8:45 AM</span>
-            </div>
-            <div class="card-title">Watch List Build</div>
-            <ul class="checklist" id="watchlist-list">
-                <li>Add stocks with fresh news catalysts</li>
-                <li>Add stocks making outsized pre-market moves</li>
-                <li>Add high relative volume movers</li>
-                <li>Mark key technical levels — prior day high/low, prior close</li>
-                <li>Draw trend lines and note key support/resistance</li>
-                <li>Set price alerts for every ticker on the watch list</li>
-            </ul>
-            <p style="margin-top:1rem; color:#8b949e; font-size:0.8rem;">Today's tickers:</p>
-            <textarea class="tickers-input" id="tickers" placeholder="e.g. NVDA, TSLA, SPY..."></textarea>
-        </div>
-        
-        <!-- Card 3: Temp Check -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-time">9:00 AM</span>
-            </div>
-            <div class="card-title">Temp Check — Daily Report Card</div>
-            <div class="temp-check">
-                <label><input type="radio" name="temp" value="A"> Did I sleep well? Am I rested?</label>
-                <label><input type="radio" name="temp" value="B"> Am I emotionally centered — nothing off outside of trading?</label>
-                <label><input type="radio" name="temp" value="C"> Am I mentally sharp and focused today?</label>
-            </div>
-            <p style="margin-top:1rem; color:#8b949e; font-size:0.8rem;">Today's grade:</p>
-            <div class="temp-check">
-                <label><input type="radio" name="grade" value="A"> A — Full sizing. Press your edge.</label>
-                <label><input type="radio" name="grade" value="B"> B — Standard sizing. Stay disciplined.</label>
-                <label><input type="radio" name="grade" value="C"> C — Size way down. Trade selectively.</label>
-                <label><input type="radio" name="grade" value="D"> D — Strongly consider not trading.</label>
-                <label><input type="radio" name="grade" value="F"> F — Do not trade. Protect capital.</label>
-            </div>
-            <div class="grade-display" id="gradeDisplay"></div>
-            <div class="sizing-guide">
-                <strong>Sizing by grade:</strong>
-                <div class="sizing-legend">
-                    <span class="grade-a">A = Full</span>
-                    <span class="grade-b">B = Standard</span>
-                    <span class="grade-c">C = Down</span>
-                    <span class="grade-d">D = Sit out</span>
-                    <span class="grade-f">F = No trade</span>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <script>
-        // Set today's date
-        const today = new Date().toLocaleDateString('en-US', { 
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
-        });
-        document.getElementById('currentDate').textContent = today;
-        
-        // Load saved state
-        const saved = JSON.parse(localStorage.getItem('preMarketPrep') || '{}');
-        if (saved.date === today) {
-            // Restore checkboxes
-            document.querySelectorAll('#awareness-list li').forEach((li, i) => {
-                if (saved.awareness?.includes(i)) li.classList.add('checked');
-            });
-            document.querySelectorAll('#watchlist-list li').forEach((li, i) => {
-                if (saved.watchlist?.includes(i)) li.classList.add('checked');
-            });
-            document.querySelectorAll('#final-list li').forEach((li, i) => {
-                if (saved.final?.includes(i)) li.classList.add('checked');
-            });
-            // Restore inputs
-            if (saved.tickers) document.getElementById('tickers').value = saved.tickers;
-            if (saved.playNotes) document.getElementById('playNotes').value = saved.playNotes;
-            if (saved.grade) {
-                document.querySelector(`input[name="grade"][value="${saved.grade}"]`).checked = true;
-                showGrade(saved.grade);
-            }
-        }
-        
-        // Toggle checkboxes on click
-        document.querySelectorAll('.checklist li').forEach(li => {
-            li.addEventListener('click', () => li.classList.toggle('checked'));
-        });
-        
-        // Grade display
-        function showGrade(grade) {
-            const display = document.getElementById('gradeDisplay');
-            const grades = { A: 'A — Full sizing. Press.', B: 'B — Standard. Stay sharp.', C: 'C — Size down.', D: 'D — Consider sitting out.', F: 'F — No trading.' };
-            display.textContent = grade + ' — ' + grades[grade];
-            display.className = 'grade-display show grade-' + grade.toLowerCase();
-        }
-        document.querySelectorAll('input[name="grade"]').forEach(r => {
-            r.addEventListener('change', (e) => showGrade(e.target.value));
-        });
-        
-        // Save on changes
-        function save() {
-            const state = { date: today, awareness: [], watchlist: [], final: [], tickers: '', playNotes: '', grade: '' };
-            document.querySelectorAll('#awareness-list li').forEach((li, i) => {
-                if (li.classList.contains('checked')) state.awareness.push(i);
-            });
-            document.querySelectorAll('#watchlist-list li').forEach((li, i) => {
-                if (li.classList.contains('checked')) state.watchlist.push(i);
-            });
-            document.querySelectorAll('#final-list li').forEach((li, i) => {
-                if (li.classList.contains('checked')) state.final.push(i);
-            });
-            state.tickers = document.getElementById('tickers').value;
-            state.playNotes = document.getElementById('playNotes').value;
-            const gradeEl = document.querySelector('input[name="grade"]:checked');
-            if (gradeEl) state.grade = gradeEl.value;
-            localStorage.setItem('preMarketPrep', JSON.stringify(state));
-        }
-        
-        document.querySelectorAll('.checklist li, input, textarea').forEach(el => {
-            el.addEventListener('change', save);
-            el.addEventListener('click', save);
-        });
-    </script>
+<!-- TOP BAR -->
+<div class="topbar">
+  <nav class="topbar-nav">
+    <a href="index.html">Morning Brief</a>
+    <a href="prep.html" class="active">Pre-Market Prep</a>
+  </nav>
+  <div class="topbar-center">
+    <div class="topbar-title">Pre-Market Prep</div>
+    <div class="topbar-date" id="currentDate"></div>
+  </div>
+  <div class="countdown-wrap">
+    <div class="countdown-label">Open in</div>
+    <div class="countdown" id="countdown">--:--:--</div>
+  </div>
+</div>
+
+<!-- STATUS STRIP -->
+<div class="status-strip">
+  <div class="status-item"><div class="status-dot" id="futures-dot"></div><span>Futures</span><span id="futures-status" style="color:var(--text)">—</span></div>
+  <div class="status-item"><div class="status-dot amber"></div><span>Pre-Market</span><span id="session-label" style="color:var(--text)">—</span></div>
+  <div class="status-item"><div class="status-dot green" style="animation: pulse 2s infinite;"></div><span>NYSE Open</span><span style="color:var(--text)">9:30 AM ET</span></div>
+  <div class="status-item"><div class="status-dot"></div><span>NYSE Close</span><span style="color:var(--text)">4:00 PM ET</span></div>
+</div>
+
+<style>
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+</style>
+
+<!-- PROGRESS BAR -->
+<div class="progress-section">
+  <div class="progress-bar-outer">
+    <div class="progress-bar-fill" id="globalProgress"></div>
+  </div>
+  <div class="progress-stats">
+    <span><span class="pct" id="globalPct">0%</span> complete</span>
+    <span id="globalFraction" style="color:var(--dim)">0 / 0 tasks</span>
+  </div>
+</div>
+
+<!-- CARDS GRID -->
+<div class="main">
+
+  <!-- CARD 1: Market Awareness -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-time">8:30 AM</span>
+      <span class="card-title">Market Awareness</span>
+      <span class="card-progress-mini"><span id="c1p">0</span>/6</span>
+    </div>
+    <div class="card-body">
+      <ul class="checklist" id="awareness-list">
+        <li><div class="check-box">✓</div><span class="check-text">Check overnight futures, pre-market movers, and macro news</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Review prior day tickers — what followed through, what failed</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Scan earnings releases and surprises</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Note IPOs, secondaries, and lockup expirations</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Review analyst upgrades and downgrades</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Check macro events: Fed speakers, CPI, jobs data, etc.</span></li>
+      </ul>
+      <div class="rule-note">Not predicting — just asking: what is in play today that I should watch should it set up?</div>
+    </div>
+  </div>
+
+  <!-- CARD 2: Watch List Build -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-time">8:45 AM</span>
+      <span class="card-title">Watch List Build</span>
+      <span class="card-progress-mini"><span id="c2p">0</span>/6</span>
+    </div>
+    <div class="card-body">
+      <ul class="checklist" id="watchlist-list">
+        <li><div class="check-box">✓</div><span class="check-text">Add stocks with fresh news catalysts</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Add stocks making outsized pre-market moves</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Add high relative volume movers</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Mark key technical levels — prior day high/low, prior close</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Draw trend lines and note key support/resistance</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Set price alerts for every ticker on the watch list</span></li>
+      </ul>
+      <div>
+        <div class="field-label">Today's tickers</div>
+        <textarea class="field-input" id="tickers" placeholder="NVDA (earnings gap), TSLA (upgrade), SPY (CPI)..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: Temp Check -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-time">9:00 AM</span>
+      <span class="card-title">Temp Check</span>
+      <span class="card-progress-mini"><span id="c3p">—</span></span>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="field-label">Mental state check</div>
+        <ul class="checklist" id="temp-list">
+          <li><div class="check-box">✓</div><span class="check-text">Did I sleep well? Am I rested?</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Am I emotionally centered — nothing off outside trading?</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Am I mentally sharp and focused today?</span></li>
+        </ul>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div class="field-label">Calculator</div>
+        <div class="calc-grid">
+          <div class="calc-box">
+            <div class="calc-label">Entry Price</div>
+            <input class="calc-input" id="calc-entry" type="number" step="0.01" placeholder="0.00" oninput="calcAutoStop(); calcUpdate()">
+          </div>
+          <div class="calc-box">
+            <div class="calc-label">Exit Price</div>
+            <input class="calc-input" id="calc-exit" type="number" step="0.01" placeholder="0.00" oninput="calcUpdate()">
+          </div>
+          <div class="calc-box">
+            <div class="calc-label">Shares</div>
+            <input class="calc-input" id="calc-shares-input" type="number" step="1" value="100" oninput="calcAutoStop(); calcUpdate()">
+          </div>
+          <div class="calc-box" style="grid-column: 1 / -1;">
+            <div class="calc-label">Stop Loss Price <span style="color:var(--muted);font-size:0.55rem;margin-left:4px;">auto: entry − ($250 ÷ shares)</span></div>
+            <input class="calc-input" id="calc-stop" type="number" step="0.01" placeholder="0.00" oninput="calcUpdate()">
+          </div>
+        </div>
+        <div class="calc-results" id="calc-results">
+          <div class="calc-result-row">
+            <span class="calc-result-label">Stop Loss Price</span>
+            <span class="calc-result-val neutral" id="calc-stop-display">—</span>
+          </div>
+          <div class="calc-result-row">
+            <span class="calc-result-label">Max Loss</span>
+            <span class="calc-result-val" id="calc-maxloss">—</span>
+          </div>
+          <div class="calc-result-row">
+            <span class="calc-result-label">P&amp;L at target</span>
+            <span class="calc-result-val" id="calc-pnl">—</span>
+          </div>
+          <div class="calc-result-row">
+            <span class="calc-result-label">Risk / Reward</span>
+            <span class="calc-result-val" id="calc-rr">—</span>
+          </div>
+          <div class="calc-result-row">
+            <span class="calc-result-label">Position size</span>
+            <span class="calc-result-val" id="calc-size">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div class="field-label">Today's grade</div>
+        <div class="grade-grid" id="grade-grid">
+          <label class="grade-option" data-grade="A">
+            <input type="radio" name="grade" value="A">
+            <span class="grade-letter">A</span>
+            <span class="grade-desc">Full sizing — press your edge</span>
+          </label>
+          <label class="grade-option" data-grade="B">
+            <input type="radio" name="grade" value="B">
+            <span class="grade-letter">B</span>
+            <span class="grade-desc">Standard sizing, stay disciplined</span>
+          </label>
+          <label class="grade-option" data-grade="C">
+            <input type="radio" name="grade" value="C">
+            <span class="grade-letter">C</span>
+            <span class="grade-desc">Size way down, trade selectively</span>
+          </label>
+          <label class="grade-option" data-grade="D">
+            <input type="radio" name="grade" value="D">
+            <span class="grade-letter">D</span>
+            <span class="grade-desc">Strongly consider sitting out</span>
+          </label>
+          <label class="grade-option" data-grade="F">
+            <input type="radio" name="grade" value="F">
+            <span class="grade-letter">F</span>
+            <span class="grade-desc">Do not trade — protect capital</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 4: Playbook -->
+  <div class="card wide">
+    <div class="card-head">
+      <span class="card-time">9:15 AM</span>
+      <span class="card-title">Playbook</span>
+      <span class="card-progress-mini" id="c4p" style="color:var(--muted)">tap to expand</span>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="field-label">Setups in play today — tap for guide</div>
+        <div class="playbook-grid" id="playbook-grid">
+
+          <div class="play-btn" data-play="Gap & Go" data-num="1" onclick="togglePlay(this)">
+            <div class="play-btn-top">
+              <span class="play-num">1</span>
+              <span class="play-name">Gap &amp; Go</span>
+            </div>
+            <div class="play-meta">
+              <span class="play-win">65–72%</span>
+              <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot"></div><div class="play-dot"></div></div>
+              <span class="play-diff">Easy</span>
+            </div>
+          </div>
+
+          <div class="play-btn" data-play="ORB 15-min" data-num="2" onclick="togglePlay(this)">
+            <div class="play-btn-top">
+              <span class="play-num">2</span>
+              <span class="play-name">ORB 15-min</span>
+            </div>
+            <div class="play-meta">
+              <span class="play-win">62–70%</span>
+              <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot"></div><div class="play-dot"></div></div>
+              <span class="play-diff">Easy</span>
+            </div>
+          </div>
+
+          <div class="play-btn" data-play="VWAP Reclaim" data-num="3" onclick="togglePlay(this)">
+            <div class="play-btn-top">
+              <span class="play-num">3</span>
+              <span class="play-name">VWAP Reclaim</span>
+            </div>
+            <div class="play-meta">
+              <span class="play-win">60–68%</span>
+              <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot filled"></div><div class="play-dot"></div></div>
+              <span class="play-diff">Easy-Med</span>
+            </div>
+          </div>
+
+          <div class="play-btn" data-play="Breakout" data-num="4" onclick="togglePlay(this)">
+            <div class="play-btn-top">
+              <span class="play-num">4</span>
+              <span class="play-name">Breakout</span>
+            </div>
+            <div class="play-meta">
+              <span class="play-win">58–65%</span>
+              <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot filled"></div><div class="play-dot"></div></div>
+              <span class="play-diff">Easy-Med</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- DETAIL PANELS -->
+        <div class="play-detail" id="detail-1">
+          <div class="play-detail-title">Gap &amp; Go — How to play it</div>
+          <div class="play-section">
+            <div class="play-section-label">Steps</div>
+            <div class="play-steps">
+              <div class="play-step"><div class="play-step-num">1</div><span>Pre-market: find stocks gapping 4%+ on a news catalyst (earnings, upgrade, PR)</span></div>
+              <div class="play-step"><div class="play-step-num">2</div><span>Mark the pre-market high. This is your key level at the open</span></div>
+              <div class="play-step"><div class="play-step-num">3</div><span>At 9:30 watch the first 1–2 candles. Let the initial spike happen — do not chase</span></div>
+              <div class="play-step"><div class="play-step-num">4</div><span>Buy the first pullback candle that holds above VWAP or the pre-market high</span></div>
+              <div class="play-step"><div class="play-step-num">5</div><span>Stop below the low of the pullback candle. Target: prior resistance or high of day</span></div>
+              <div class="play-step"><div class="play-step-num">6</div><span>If it reclaims and breaks pre-market high with volume — full send</span></div>
+            </div>
+          </div>
+          <div class="play-section">
+            <div class="play-section-label">Indicators</div>
+            <div class="play-tags-row">
+              <span class="play-pill">VWAP</span><span class="play-pill">Pre-mkt High</span><span class="play-pill">Relative Volume</span><span class="play-pill">L2 / Tape</span>
+            </div>
+          </div>
+          <div class="play-section">
+            <div class="play-section-label">Best time</div>
+            <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>9:30–10:30 AM ET. After 10:30 the momentum fades fast</span></div>
+          </div>
+        </div>
+
+        <div class="play-detail" id="detail-2">
+          <div class="play-detail-title">ORB 15-min — How to play it</div>
+          <div class="play-section">
+            <div class="play-section-label">Steps</div>
+            <div class="play-steps">
+              <div class="play-step"><div class="play-step-num">1</div><span>Let the first 15 minutes trade. Do not enter during this window — just watch</span></div>
+              <div class="play-step"><div class="play-step-num">2</div><span>Mark the exact high and low of the 9:30–9:45 candle. This is your range</span></div>
+              <div class="play-step"><div class="play-step-num">3</div><span>Set alerts at both levels. At 9:44 be ready — you want to react the instant the candle closes</span></div>
+              <div class="play-step"><div class="play-step-num">4</div><span>If price breaks above the range high on volume: go long. Stop below range high</span></div>
+              <div class="play-step"><div class="play-step-num">5</div><span>If price breaks below the range low on volume: go short. Stop above range low</span></div>
+              <div class="play-step"><div class="play-step-num">6</div><span>Best when the breakout aligns with the pre-market trend direction</span></div>
+            </div>
+          </div>
+          <div class="play-section">
+            <div class="play-section-label">Indicators</div>
+            <div class="play-tags-row">
+              <span class="play-pill">15-min Chart</span><span class="play-pill">VWAP</span><span class="play-pill">Volume Surge</span><span class="play-pill">Pre-mkt Trend</span>
+            </div>
+          </div>
+          <div class="play-section">
+            <div class="play-section-label">Best time</div>
+            <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>Entry at 9:45 AM ET. Secondary entries 10:00–11:00 on retests of the range</span></div>
+          </div>
+        </div>
+
+        <div class="play-detail" id="detail-3">
+          <div class="play-detail-title">VWAP Reclaim — How to play it</div>
+          <div class="play-section">
+            <div class="play-section-label">Steps</div>
+            <div class="play-steps">
+              <div class="play-step"><div class="play-step-num">1</div><span>Find a stock that dipped below VWAP but is showing signs of stabilizing</span></div>
+              <div class="play-step"><div class="play-step-num">2</div><span>Watch for a candle that closes back above VWAP with increasing volume</span></div>
+              <div class="play-step"><div class="play-step-num">3</div><span>Enter on the candle that reclaims VWAP or the first pullback to VWAP after reclaim</span></div>
+              <div class="play-step"><div class="play-step-num">4</div><span>Stop below VWAP — if it loses VWAP again the setup is failed</span></div>
+              <div class="play-step"><div class="play-step-num">5</div><span>Target: prior high, next resistance level, or HOD</span></div>
+              <div class="play-step"><div class="play-step-num">6</div><span>Strongest when the broader market (SPY) is also above its VWAP</span></div>
+            </div>
+          </div>
+          <div class="play-section">
+            <div class="play-section-label">Indicators</div>
+            <div class="play-tags-row">
+              <span class="play-pill">VWAP</span><span class="play-pill">Volume</span><span class="play-pill">SPY Correlation</span><span class="play-pill">1-min / 5-min</span>
+            </div>
+          </div>
+          <div class="play-section">
+            <div class="play-section-label">Best time</div>
+            <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>9:45–11:30 AM and 1:00–2:30 PM ET. Avoid the choppy midday 11:30–1:00 window</span></div>
+          </div>
+        </div>
+
+        <div class="play-detail" id="detail-4">
+          <div class="play-detail-title">Breakout — How to play it</div>
+          <div class="play-section">
+            <div class="play-section-label">Steps</div>
+            <div class="play-steps">
+              <div class="play-step"><div class="play-step-num">1</div><span>Identify a stock consolidating in a tight range near a key resistance level (prior high, round number)</span></div>
+              <div class="play-step"><div class="play-step-num">2</div><span>The tighter and longer the consolidation the better — coiled spring effect</span></div>
+              <div class="play-step"><div class="play-step-num">3</div><span>Watch for a candle that closes above resistance with a volume spike (2x average or more)</span></div>
+              <div class="play-step"><div class="play-step-num">4</div><span>Enter on the breakout candle or the first pullback retest of the broken level</span></div>
+              <div class="play-step"><div class="play-step-num">5</div><span>Stop below the breakout level — if it fails back below, the breakout is false</span></div>
+              <div class="play-step"><div class="play-step-num">6</div><span>Target: measured move (height of the base added to breakout point)</span></div>
+            </div>
+          </div>
+          <div class="play-section">
+            <div class="play-section-label">Indicators</div>
+            <div class="play-tags-row">
+              <span class="play-pill">Resistance Level</span><span class="play-pill">Volume</span><span class="play-pill">5-min Chart</span><span class="play-pill">ATR</span>
+            </div>
+          </div>
+          <div class="play-section">
+            <div class="play-section-label">Best time</div>
+            <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>9:45–11:00 AM and 2:00–3:30 PM ET. Volume must confirm — no volume = no breakout</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
+          <input class="field-input" id="play-input" type="text" inputmode="numeric" placeholder="Type numbers to activate e.g. 1 2" style="min-height:unset; padding:0.4rem 0.7rem; font-size:0.75rem; flex:1;">
+          <button onclick="applyPlayNumbers()" style="font-family:var(--mono); font-size:0.7rem; padding:0.4rem 0.8rem; background:#0d2a30; border:1px solid #40c8dc; color:#40c8dc; border-radius:4px; cursor:pointer; white-space:nowrap; letter-spacing:0.05em;">Apply</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">Playbook notes</div>
+        <textarea class="field-input" id="playbookNotes" placeholder="What setups are lining up and why..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 5: Final Check -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-time">9:25 AM</span>
+      <span class="card-title">Final Check Before Open</span>
+      <span class="card-progress-mini"><span id="c5p">0</span>/4</span>
+    </div>
+    <div class="card-body">
+      <ul class="checklist" id="final-list">
+        <li><div class="check-box">✓</div><span class="check-text">All alerts are set — no excuses to miss a move</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Risk sizing confirmed based on today's grade</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Not committed to any ticker — ready to react to what sets up</span></li>
+        <li><div class="check-box">✓</div><span class="check-text">Playbooks reviewed — I know what I'm looking for</span></li>
+      </ul>
+      <div>
+        <div class="field-label">Open notes</div>
+        <textarea class="field-input" id="playNotes" placeholder="What looks set up today..."></textarea>
+      </div>
+      <div class="rule-note">I am not trying to predict anything. I am never committed to any specific ticker or sector.</div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+const today = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+document.getElementById('currentDate').textContent = today;
+
+// ── CALCULATOR ─────────────────────────────────────────────
+function calcAutoStop() {
+  const entry  = parseFloat(document.getElementById('calc-entry').value);
+  const shares = parseFloat(document.getElementById('calc-shares-input').value) || 100;
+  if (!entry || entry <= 0) return;
+  const autoStop = (entry - (250 / shares)).toFixed(2);
+  document.getElementById('calc-stop').value = autoStop;
+}
+
+function calcUpdate() {
+  const entry  = parseFloat(document.getElementById('calc-entry').value);
+  const exit   = parseFloat(document.getElementById('calc-exit').value);
+  const stop   = parseFloat(document.getElementById('calc-stop').value);
+  const shares = parseFloat(document.getElementById('calc-shares-input').value) || 100;
+
+  const stopDispEl  = document.getElementById('calc-stop-display');
+  const maxLossEl   = document.getElementById('calc-maxloss');
+  const pnlEl       = document.getElementById('calc-pnl');
+  const rrEl        = document.getElementById('calc-rr');
+  const sizeEl      = document.getElementById('calc-size');
+
+  if (!entry || entry <= 0 || !stop || stop <= 0) {
+    [stopDispEl, maxLossEl, pnlEl, rrEl, sizeEl].forEach(e => { e.textContent = '—'; e.className = 'calc-result-val'; });
+    return;
+  }
+
+  const riskPerShare = Math.abs(entry - stop);
+  const maxLoss      = -(shares * riskPerShare);
+  const posSize      = shares * entry;
+  const pnl          = exit ? shares * (exit - entry) : null;
+  const rr           = exit && riskPerShare > 0 ? ((exit - entry) / riskPerShare).toFixed(2) : null;
+
+  stopDispEl.textContent = '$' + stop.toFixed(2);
+  stopDispEl.className = 'calc-result-val neutral';
+
+  maxLossEl.textContent = '-$' + Math.abs(maxLoss).toFixed(2);
+  maxLossEl.className = 'calc-result-val neg';
+
+  if (pnl !== null) {
+    pnlEl.textContent = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2);
+    pnlEl.className = 'calc-result-val ' + (pnl > 0 ? 'pos' : 'neg');
+    rrEl.textContent = rr + ':1';
+    rrEl.className = 'calc-result-val ' + (parseFloat(rr) >= 2 ? 'pos' : parseFloat(rr) >= 1 ? 'neutral' : 'neg');
+  } else {
+    pnlEl.textContent = '—'; pnlEl.className = 'calc-result-val';
+    rrEl.textContent  = '—'; rrEl.className  = 'calc-result-val';
+  }
+
+  sizeEl.textContent = '$' + posSize.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  sizeEl.className = 'calc-result-val neutral';
+}
+
+// ── COUNTDOWN ──────────────────────────────────────────────
+function updateCountdown() {
+  const now = new Date();
+  const et = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  const open = new Date(et); open.setHours(9, 30, 0, 0);
+  const close = new Date(et); close.setHours(16, 0, 0, 0);
+  const el = document.getElementById('countdown');
+  const day = et.getDay();
+  const isWeekend = day === 0 || day === 6;
+
+  if (isWeekend) {
+    el.textContent = 'WEEKEND'; el.className = 'countdown post-market'; return;
+  }
+  if (et >= open && et <= close) {
+    const diff = close - et;
+    const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+    el.textContent = `OPEN ${pad(h)}:${pad(m)}:${pad(s)}`; el.className = 'countdown market-open'; return;
+  }
+  if (et > close) {
+    el.textContent = 'CLOSED'; el.className = 'countdown post-market'; return;
+  }
+  const diff = open - et;
+  const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+  el.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`; el.className = 'countdown';
+  // session label
+  const preOpen = new Date(et); preOpen.setHours(4,0,0,0);
+  document.getElementById('session-label').textContent = et >= preOpen ? 'ACTIVE' : 'INACTIVE';
+}
+function pad(n) { return String(n).padStart(2,'0'); }
+updateCountdown(); setInterval(updateCountdown, 1000);
+
+// ── CHECKLISTS ─────────────────────────────────────────────
+const lists = {
+  'awareness-list': 'c1p',
+  'watchlist-list': 'c2p',
+  'temp-list': 'c3p',
+  'final-list': 'c5p'
+};
+
+document.querySelectorAll('.checklist li').forEach(li => {
+  li.addEventListener('click', () => { li.classList.toggle('checked'); updateProgress(); save(); });
+});
+
+function updateProgress() {
+  let total = 0, done = 0;
+  Object.entries(lists).forEach(([listId, counterId]) => {
+    const items = document.querySelectorAll(`#${listId} li`);
+    const checked = document.querySelectorAll(`#${listId} li.checked`);
+    document.getElementById(counterId).textContent = checked.length;
+    total += items.length; done += checked.length;
+  });
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('globalProgress').style.width = pct + '%';
+  document.getElementById('globalPct').textContent = pct + '%';
+  document.getElementById('globalFraction').textContent = `${done} / ${total} tasks`;
+}
+
+// ── GRADE ──────────────────────────────────────────────────
+document.querySelectorAll('.grade-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    const g = opt.dataset.grade;
+    opt.querySelector('input').checked = true;
+    document.querySelectorAll('.grade-option').forEach(o => o.className = 'grade-option');
+    opt.className = `grade-option sel-${g}`;
+    save();
+  });
+});
+
+// ── PLAYBOOK NUMBER INPUT ──────────────────────────────────
+function applyPlayNumbers() {
+  const val = document.getElementById('play-input').value;
+  const nums = val.replace(/[^0-9]/g, '').split('');
+  document.querySelectorAll('.play-btn').forEach(t => {
+    if (nums.includes(t.dataset.num)) { t.classList.add('active'); }
+    else t.classList.remove('active');
+  });
+  document.getElementById('play-input').value = '';
+  save();
+}
+document.getElementById('play-input').addEventListener('keydown', e => { if (e.key === 'Enter') applyPlayNumbers(); });
+
+// ── PLAYBOOK TOGGLE + DETAIL ───────────────────────────────
+function togglePlay(btn) {
+  const num = btn.dataset.num;
+  const detail = document.getElementById('detail-' + num);
+  const wasActive = btn.classList.contains('active');
+  // close all details first
+  document.querySelectorAll('.play-detail').forEach(d => d.classList.remove('show'));
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('active'));
+  if (!wasActive) {
+    btn.classList.add('active');
+    if (detail) { detail.classList.add('show'); detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+  }
+  save();
+}
+
+// ── SAVE / RESTORE ─────────────────────────────────────────
+function save() {
+  const state = { date: today, awareness:[], watchlist:[], temp:[], final:[], tickers:'', playNotes:'', playbookNotes:'', grade:'', plays:[] };
+  ['awareness-list','watchlist-list','temp-list','final-list'].forEach((id,i) => {
+    const key = ['awareness','watchlist','temp','final'][i];
+    document.querySelectorAll(`#${id} li`).forEach((li,j) => { if(li.classList.contains('checked')) state[key].push(j); });
+  });
+  state.tickers = document.getElementById('tickers').value;
+  state.playNotes = document.getElementById('playNotes').value;
+  state.playbookNotes = document.getElementById('playbookNotes').value;
+  const gradeEl = document.querySelector('.grade-option input:checked');
+  if (gradeEl) state.grade = gradeEl.value;
+  document.querySelectorAll('.play-btn').forEach(t => state.plays.push(t.dataset.play));
+  localStorage.setItem('preMarketPrep', JSON.stringify(state));
+}
+
+function restore() {
+  const saved = JSON.parse(localStorage.getItem('preMarketPrep') || '{}');
+  if (saved.date !== today) return;
+  ['awareness-list','watchlist-list','temp-list','final-list'].forEach((id,i) => {
+    const key = ['awareness','watchlist','temp','final'][i];
+    document.querySelectorAll(`#${id} li`).forEach((li,j) => { if(saved[key]?.includes(j)) li.classList.add('checked'); });
+  });
+  if (saved.tickers) document.getElementById('tickers').value = saved.tickers;
+  if (saved.playNotes) document.getElementById('playNotes').value = saved.playNotes;
+  if (saved.playbookNotes) document.getElementById('playbookNotes').value = saved.playbookNotes;
+  if (saved.grade) {
+    const opt = document.querySelector(`.grade-option[data-grade="${saved.grade}"]`);
+    if (opt) { opt.querySelector('input').checked = true; opt.className = `grade-option sel-${saved.grade}`; }
+  }
+  if (saved.plays) {
+    document.querySelectorAll('.play-btn').forEach(t => { if(saved.plays.includes(t.dataset.play)) t.classList.add('active'); });
+  }
+  updateProgress();
+}
+
+document.querySelectorAll('textarea').forEach(el => { el.addEventListener('input', save); });
+restore();
+</script>
 </body>
 </html>
