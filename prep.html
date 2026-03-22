@@ -39,7 +39,6 @@ body {
   overflow-x: hidden;
 }
 
-/* scanline texture */
 body::before {
   content: '';
   position: fixed;
@@ -100,7 +99,6 @@ body::before {
   letter-spacing: 0.05em;
 }
 
-/* COUNTDOWN TIMER */
 .countdown-wrap {
   display: flex;
   align-items: center;
@@ -168,7 +166,33 @@ body::before {
   font-weight: 600;
 }
 
-/* MAIN LAYOUT */
+/* STATUS STRIP */
+.status-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 0.5rem 2rem;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  overflow-x: auto;
+}
+.status-item { display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+.status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
+.status-dot.green { background: var(--green); box-shadow: 0 0 4px var(--green); animation: pulse 2s infinite; }
+.status-dot.amber { background: var(--amber); }
+.status-dot.red { background: var(--red); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ─── MAIN LAYOUT ─────────────────────────────────────── */
 .main {
   padding: 2rem;
   display: flex;
@@ -178,21 +202,40 @@ body::before {
   margin: 0 auto;
 }
 
-.main-top {
+/* Row labels */
+.row-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: -0.25rem;
+}
+.row-label-num {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  padding: 0.15rem 0.5rem;
+  text-transform: uppercase;
+}
+.row-label-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Row containers */
+.row-full {
   width: 100%;
 }
 
-.main-bottom {
+.row-pair {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
-}
-
-@media (max-width: 1100px) {
-  .main-bottom { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 600px) {
-  .main-bottom { grid-template-columns: 1fr; }
 }
 
 /* CARDS */
@@ -256,6 +299,18 @@ body::before {
 .card-progress-mini span { color: var(--green); }
 
 .card-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 0.75rem; }
+
+/* ── Playbook card: two-column interior on wide screens */
+.playbook-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+.playbook-inner-left { display: flex; flex-direction: column; gap: 0.75rem; }
+.playbook-inner-right { display: flex; flex-direction: column; gap: 0.75rem; }
+.playbook-inner-right .notes-wrap { display: flex; flex-direction: column; flex: 1; }
+.playbook-inner-right .notes-wrap textarea { flex: 1; resize: none; }
 
 /* CHECKLIST */
 .checklist { list-style: none; display: flex; flex-direction: column; gap: 1px; }
@@ -414,6 +469,7 @@ body::before {
   padding: 1rem;
   margin-top: 2px;
   animation: fadeUp 0.2s ease;
+  grid-column: 1 / -1;
 }
 .play-detail.show { display: block; }
 .play-detail-title {
@@ -521,30 +577,14 @@ body::before {
 /* DIVIDER */
 .divider { height: 1px; background: var(--border); margin: 0.25rem 0; }
 
-/* MARKET STATUS STRIP */
-.status-strip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  padding: 0.5rem 2rem;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  overflow-x: auto;
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .row-pair { grid-template-columns: 1fr; }
+  .playbook-inner { grid-template-columns: 1fr; }
 }
-.status-item { display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
-.status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
-.status-dot.green { background: var(--green); box-shadow: 0 0 4px var(--green); }
-.status-dot.amber { background: var(--amber); }
-.status-dot.red { background: var(--red); }
-
 @media (max-width: 700px) {
   .topbar { padding: 0.75rem 1rem; }
-  .main { padding: 1rem; grid-template-columns: 1fr; }
+  .main { padding: 1rem; }
   .progress-section { padding: 0.75rem 1rem; }
   .status-strip { gap: 1rem; }
 }
@@ -572,16 +612,9 @@ body::before {
 <div class="status-strip">
   <div class="status-item"><div class="status-dot" id="futures-dot"></div><span>Futures</span><span id="futures-status" style="color:var(--text)">—</span></div>
   <div class="status-item"><div class="status-dot amber"></div><span>Pre-Market</span><span id="session-label" style="color:var(--text)">—</span></div>
-  <div class="status-item"><div class="status-dot green" style="animation: pulse 2s infinite;"></div><span>NYSE Open</span><span style="color:var(--text)">9:30 AM ET</span></div>
+  <div class="status-item"><div class="status-dot green"></div><span>NYSE Open</span><span style="color:var(--text)">9:30 AM ET</span></div>
   <div class="status-item"><div class="status-dot"></div><span>NYSE Close</span><span style="color:var(--text)">4:00 PM ET</span></div>
 </div>
-
-<style>
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-</style>
 
 <!-- PROGRESS BAR -->
 <div class="progress-section">
@@ -594,346 +627,388 @@ body::before {
   </div>
 </div>
 
-<!-- CARDS GRID -->
+<!-- CARDS -->
 <div class="main">
-  <!-- Top: Playbook full width -->
-  <div class="main-top">
 
-  <!-- CARD 1: Market Awareness -->
-  <div class="card">
-    <div class="card-head">
-      <span class="card-time">8:30 AM</span>
-      <span class="card-title">Market Awareness</span>
-      <span class="card-progress-mini"><span id="c1p">0</span>/6</span>
-    </div>
-    <div class="card-body">
-      <ul class="checklist" id="awareness-list">
-        <li><div class="check-box">✓</div><span class="check-text">Check overnight futures, pre-market movers, and macro news</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Review prior day tickers — what followed through, what failed</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Scan earnings releases and surprises</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Note IPOs, secondaries, and lockup expirations</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Review analyst upgrades and downgrades</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Check macro events: Fed speakers, CPI, jobs data, etc.</span></li>
-      </ul>
-      <div class="rule-note">Not predicting — just asking: what is in play today that I should watch should it set up?</div>
-    </div>
+  <!-- ── LEVEL 1: PLAYBOOK (full width) ── -->
+  <div class="row-label">
+    <span class="row-label-num">Step 1</span>
+    <div class="row-label-line"></div>
   </div>
 
-  <!-- CARD 2: Watch List Build -->
-  <div class="card">
-    <div class="card-head">
-      <span class="card-time">8:45 AM</span>
-      <span class="card-title">Watch List Build</span>
-      <span class="card-progress-mini"><span id="c2p">0</span>/6</span>
-    </div>
-    <div class="card-body">
-      <ul class="checklist" id="watchlist-list">
-        <li><div class="check-box">✓</div><span class="check-text">Add stocks with fresh news catalysts</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Add stocks making outsized pre-market moves</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Add high relative volume movers</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Mark key technical levels — prior day high/low, prior close</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Draw trend lines and note key support/resistance</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Set price alerts for every ticker on the watch list</span></li>
-      </ul>
-      <div>
-        <div class="field-label">Today's tickers</div>
-        <textarea class="field-input" id="tickers" placeholder="NVDA (earnings gap), TSLA (upgrade), SPY (CPI)..."></textarea>
+  <div class="row-full">
+    <div class="card">
+      <div class="card-head">
+        <span class="card-time">9:15 AM</span>
+        <span class="card-title">Playbook</span>
+        <span class="card-progress-mini" id="c4p" style="color:var(--muted)">tap to expand</span>
       </div>
-    </div>
+      <div class="card-body">
+        <!-- Two-column interior -->
+        <div class="playbook-inner">
+          <div class="playbook-inner-left">
+            <div>
+              <div class="field-label">Setups in play today — tap for guide</div>
+              <div class="playbook-grid" id="playbook-grid">
+
+                <div class="play-btn" data-play="Gap & Go" data-num="1" onclick="togglePlay(this)">
+                  <div class="play-btn-top">
+                    <span class="play-num">1</span>
+                    <span class="play-name">Gap &amp; Go</span>
+                  </div>
+                  <div class="play-meta">
+                    <span class="play-win">65–72%</span>
+                    <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot"></div><div class="play-dot"></div></div>
+                    <span class="play-diff">Easy</span>
+                  </div>
+                </div>
+
+                <div class="play-btn" data-play="ORB 15-min" data-num="2" onclick="togglePlay(this)">
+                  <div class="play-btn-top">
+                    <span class="play-num">2</span>
+                    <span class="play-name">ORB 15-min</span>
+                  </div>
+                  <div class="play-meta">
+                    <span class="play-win">62–70%</span>
+                    <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot"></div><div class="play-dot"></div></div>
+                    <span class="play-diff">Easy</span>
+                  </div>
+                </div>
+
+                <div class="play-btn" data-play="VWAP Reclaim" data-num="3" onclick="togglePlay(this)">
+                  <div class="play-btn-top">
+                    <span class="play-num">3</span>
+                    <span class="play-name">VWAP Reclaim</span>
+                  </div>
+                  <div class="play-meta">
+                    <span class="play-win">60–68%</span>
+                    <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot filled"></div><div class="play-dot"></div></div>
+                    <span class="play-diff">Easy-Med</span>
+                  </div>
+                </div>
+
+                <div class="play-btn" data-play="Breakout" data-num="4" onclick="togglePlay(this)">
+                  <div class="play-btn-top">
+                    <span class="play-num">4</span>
+                    <span class="play-name">Breakout</span>
+                  </div>
+                  <div class="play-meta">
+                    <span class="play-win">58–65%</span>
+                    <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot filled"></div><div class="play-dot"></div></div>
+                    <span class="play-diff">Easy-Med</span>
+                  </div>
+                </div>
+
+              </div><!-- /playbook-grid -->
+
+              <!-- DETAIL PANELS — max 2 shown, side by side -->
+              <div id="detail-panels-grid" style="margin-top:6px; display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                <div class="play-detail" id="detail-1">
+                  <div class="play-detail-title">Gap &amp; Go — How to play it</div>
+                  <div class="play-section">
+                    <div class="play-section-label">Steps</div>
+                    <div class="play-steps">
+                      <div class="play-step"><div class="play-step-num">1</div><span>Pre-market: find stocks gapping 4%+ on a news catalyst (earnings, upgrade, PR)</span></div>
+                      <div class="play-step"><div class="play-step-num">2</div><span>Mark the pre-market high. This is your key level at the open</span></div>
+                      <div class="play-step"><div class="play-step-num">3</div><span>At 9:30 watch the first 1–2 candles. Let the initial spike happen — do not chase</span></div>
+                      <div class="play-step"><div class="play-step-num">4</div><span>Buy the first pullback candle that holds above VWAP or the pre-market high</span></div>
+                      <div class="play-step"><div class="play-step-num">5</div><span>Stop below the low of the pullback candle. Target: prior resistance or high of day</span></div>
+                      <div class="play-step"><div class="play-step-num">6</div><span>If it reclaims and breaks pre-market high with volume — full send</span></div>
+                    </div>
+                  </div>
+                  <div class="play-section">
+                    <div class="play-section-label">Indicators</div>
+                    <div class="play-tags-row">
+                      <span class="play-pill">VWAP</span><span class="play-pill">Pre-mkt High</span><span class="play-pill">Relative Volume</span><span class="play-pill">L2 / Tape</span>
+                    </div>
+                  </div>
+                  <div class="play-section">
+                    <div class="play-section-label">Best time</div>
+                    <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>9:30–10:30 AM ET. After 10:30 the momentum fades fast</span></div>
+                  </div>
+                </div>
+
+                <div class="play-detail" id="detail-2">
+                  <div class="play-detail-title">ORB 15-min — How to play it</div>
+                  <div class="play-section">
+                    <div class="play-section-label">Steps</div>
+                    <div class="play-steps">
+                      <div class="play-step"><div class="play-step-num">1</div><span>Let the first 15 minutes trade. Do not enter during this window — just watch</span></div>
+                      <div class="play-step"><div class="play-step-num">2</div><span>Mark the exact high and low of the 9:30–9:45 candle. This is your range</span></div>
+                      <div class="play-step"><div class="play-step-num">3</div><span>Set alerts at both levels. At 9:44 be ready — you want to react the instant the candle closes</span></div>
+                      <div class="play-step"><div class="play-step-num">4</div><span>If price breaks above the range high on volume: go long. Stop below range high</span></div>
+                      <div class="play-step"><div class="play-step-num">5</div><span>If price breaks below the range low on volume: go short. Stop above range low</span></div>
+                      <div class="play-step"><div class="play-step-num">6</div><span>Best when the breakout aligns with the pre-market trend direction</span></div>
+                    </div>
+                  </div>
+                  <div class="play-section">
+                    <div class="play-section-label">Indicators</div>
+                    <div class="play-tags-row">
+                      <span class="play-pill">15-min Chart</span><span class="play-pill">VWAP</span><span class="play-pill">Volume Surge</span><span class="play-pill">Pre-mkt Trend</span>
+                    </div>
+                  </div>
+                  <div class="play-section">
+                    <div class="play-section-label">Best time</div>
+                    <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>Entry at 9:45 AM ET. Secondary entries 10:00–11:00 on retests of the range</span></div>
+                  </div>
+                </div>
+
+                <div class="play-detail" id="detail-3">
+                  <div class="play-detail-title">VWAP Reclaim — How to play it</div>
+                  <div class="play-section">
+                    <div class="play-section-label">Steps</div>
+                    <div class="play-steps">
+                      <div class="play-step"><div class="play-step-num">1</div><span>Find a stock that dipped below VWAP but is showing signs of stabilizing</span></div>
+                      <div class="play-step"><div class="play-step-num">2</div><span>Watch for a candle that closes back above VWAP with increasing volume</span></div>
+                      <div class="play-step"><div class="play-step-num">3</div><span>Enter on the candle that reclaims VWAP or the first pullback to VWAP after reclaim</span></div>
+                      <div class="play-step"><div class="play-step-num">4</div><span>Stop below VWAP — if it loses VWAP again the setup is failed</span></div>
+                      <div class="play-step"><div class="play-step-num">5</div><span>Target: prior high, next resistance level, or HOD</span></div>
+                      <div class="play-step"><div class="play-step-num">6</div><span>Strongest when the broader market (SPY) is also above its VWAP</span></div>
+                    </div>
+                  </div>
+                  <div class="play-section">
+                    <div class="play-section-label">Indicators</div>
+                    <div class="play-tags-row">
+                      <span class="play-pill">VWAP</span><span class="play-pill">Volume</span><span class="play-pill">SPY Correlation</span><span class="play-pill">1-min / 5-min</span>
+                    </div>
+                  </div>
+                  <div class="play-section">
+                    <div class="play-section-label">Best time</div>
+                    <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>9:45–11:30 AM and 1:00–2:30 PM ET. Avoid the choppy midday 11:30–1:00 window</span></div>
+                  </div>
+                </div>
+
+                <div class="play-detail" id="detail-4">
+                  <div class="play-detail-title">Breakout — How to play it</div>
+                  <div class="play-section">
+                    <div class="play-section-label">Steps</div>
+                    <div class="play-steps">
+                      <div class="play-step"><div class="play-step-num">1</div><span>Identify a stock consolidating in a tight range near a key resistance level (prior high, round number)</span></div>
+                      <div class="play-step"><div class="play-step-num">2</div><span>The tighter and longer the consolidation the better — coiled spring effect</span></div>
+                      <div class="play-step"><div class="play-step-num">3</div><span>Watch for a candle that closes above resistance with a volume spike (2x average or more)</span></div>
+                      <div class="play-step"><div class="play-step-num">4</div><span>Enter on the breakout candle or the first pullback retest of the broken level</span></div>
+                      <div class="play-step"><div class="play-step-num">5</div><span>Stop below the breakout level — if it fails back below, the breakout is false</span></div>
+                      <div class="play-step"><div class="play-step-num">6</div><span>Target: measured move (height of the base added to breakout point)</span></div>
+                    </div>
+                  </div>
+                  <div class="play-section">
+                    <div class="play-section-label">Indicators</div>
+                    <div class="play-tags-row">
+                      <span class="play-pill">Resistance Level</span><span class="play-pill">Volume</span><span class="play-pill">5-min Chart</span><span class="play-pill">ATR</span>
+                    </div>
+                  </div>
+                  <div class="play-section">
+                    <div class="play-section-label">Best time</div>
+                    <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>9:45–11:00 AM and 2:00–3:30 PM ET. Volume must confirm — no volume = no breakout</span></div>
+                  </div>
+                </div>
+              </div><!-- /detail panels -->
+
+              <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
+                <input class="field-input" id="play-input" type="text" inputmode="numeric" placeholder="Type numbers to activate e.g. 1 2" style="min-height:unset; padding:0.4rem 0.7rem; font-size:0.75rem; flex:1;">
+                <button onclick="applyPlayNumbers()" style="font-family:var(--mono); font-size:0.7rem; padding:0.4rem 0.8rem; background:#0d2a30; border:1px solid #40c8dc; color:#40c8dc; border-radius:4px; cursor:pointer; white-space:nowrap; letter-spacing:0.05em;">Apply</button>
+              </div>
+            </div>
+            <!-- Slot A: first selected play detail goes here -->
+            <div id="slot-a"></div>
+          </div><!-- /playbook-inner-left -->
+
+          <div class="playbook-inner-right">
+            <div class="notes-wrap">
+              <div class="field-label">Playbook notes</div>
+              <textarea class="field-input" id="playbookNotes" placeholder="What setups are lining up and why..." style="min-height:80px;"></textarea>
+              <!-- Slot B: second selected play detail goes here -->
+              <div id="slot-b" style="margin-top:6px;"></div>
+            </div>
+          </div><!-- /playbook-inner-right -->
+        </div><!-- /playbook-inner -->
+      </div><!-- /card-body -->
+    </div><!-- /card -->
+  </div><!-- /row-full -->
+
+
+  <!-- ── LEVEL 2: MARKET AWARENESS + WATCH LIST BUILD ── -->
+  <div class="row-label">
+    <span class="row-label-num">Step 2</span>
+    <div class="row-label-line"></div>
   </div>
 
-  <!-- CARD 3: Temp Check -->
-  <div class="card">
-    <div class="card-head">
-      <span class="card-time">9:00 AM</span>
-      <span class="card-title">Temp Check</span>
-      <span class="card-progress-mini"><span id="c3p">—</span></span>
-    </div>
-    <div class="card-body">
-      <div>
-        <div class="field-label">Mental state check</div>
-        <ul class="checklist" id="temp-list">
-          <li><div class="check-box">✓</div><span class="check-text">Did I sleep well? Am I rested?</span></li>
-          <li><div class="check-box">✓</div><span class="check-text">Am I emotionally centered — nothing off outside trading?</span></li>
-          <li><div class="check-box">✓</div><span class="check-text">Am I mentally sharp and focused today?</span></li>
+  <div class="row-pair">
+
+    <!-- Market Awareness -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-time">8:30 AM</span>
+        <span class="card-title">Market Awareness</span>
+        <span class="card-progress-mini"><span id="c1p">0</span>/6</span>
+      </div>
+      <div class="card-body">
+        <ul class="checklist" id="awareness-list">
+          <li><div class="check-box">✓</div><span class="check-text">Check overnight futures, pre-market movers, and macro news</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Review prior day tickers — what followed through, what failed</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Scan earnings releases and surprises</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Note IPOs, secondaries, and lockup expirations</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Review analyst upgrades and downgrades</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Check macro events: Fed speakers, CPI, jobs data, etc.</span></li>
         </ul>
+        <div class="rule-note">Not predicting — just asking: what is in play today that I should watch should it set up?</div>
       </div>
-      <div class="divider"></div>
-      <div>
-        <div class="field-label">Calculator</div>
-        <div class="calc-grid">
-          <div class="calc-box">
-            <div class="calc-label">Entry Price</div>
-            <input class="calc-input" id="calc-entry" type="number" step="0.01" placeholder="0.00" oninput="calcAutoStop(); calcUpdate()">
-          </div>
-          <div class="calc-box">
-            <div class="calc-label">Exit Price</div>
-            <input class="calc-input" id="calc-exit" type="number" step="0.01" placeholder="0.00" oninput="calcUpdate()">
-          </div>
-          <div class="calc-box">
-            <div class="calc-label">Shares</div>
-            <input class="calc-input" id="calc-shares-input" type="number" step="1" value="100" oninput="calcAutoStop(); calcUpdate()">
-          </div>
-          <div class="calc-box" style="grid-column: 1 / -1;">
-            <div class="calc-label">Stop Loss Price <span style="color:var(--muted);font-size:0.55rem;margin-left:4px;">auto: entry − ($250 ÷ shares)</span></div>
-            <input class="calc-input" id="calc-stop" type="number" step="0.01" placeholder="0.00" oninput="calcUpdate()">
-          </div>
-        </div>
-        <div class="calc-results" id="calc-results">
-          <div class="calc-result-row">
-            <span class="calc-result-label">Stop Loss Price</span>
-            <span class="calc-result-val neutral" id="calc-stop-display">—</span>
-          </div>
-          <div class="calc-result-row">
-            <span class="calc-result-label">Max Loss</span>
-            <span class="calc-result-val" id="calc-maxloss">—</span>
-          </div>
-          <div class="calc-result-row">
-            <span class="calc-result-label">P&amp;L at target</span>
-            <span class="calc-result-val" id="calc-pnl">—</span>
-          </div>
-          <div class="calc-result-row">
-            <span class="calc-result-label">Risk / Reward</span>
-            <span class="calc-result-val" id="calc-rr">—</span>
-          </div>
-          <div class="calc-result-row">
-            <span class="calc-result-label">Position size</span>
-            <span class="calc-result-val" id="calc-size">—</span>
-          </div>
-        </div>
+    </div>
+
+    <!-- Watch List Build -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-time">8:45 AM</span>
+        <span class="card-title">Watch List Build</span>
+        <span class="card-progress-mini"><span id="c2p">0</span>/6</span>
       </div>
-      <div class="divider"></div>
-      <div>
-        <div class="field-label">Today's grade</div>
-        <div class="grade-grid" id="grade-grid">
-          <label class="grade-option" data-grade="A">
-            <input type="radio" name="grade" value="A">
-            <span class="grade-letter">A</span>
-            <span class="grade-desc">Full sizing — press your edge</span>
-          </label>
-          <label class="grade-option" data-grade="B">
-            <input type="radio" name="grade" value="B">
-            <span class="grade-letter">B</span>
-            <span class="grade-desc">Standard sizing, stay disciplined</span>
-          </label>
-          <label class="grade-option" data-grade="C">
-            <input type="radio" name="grade" value="C">
-            <span class="grade-letter">C</span>
-            <span class="grade-desc">Size way down, trade selectively</span>
-          </label>
-          <label class="grade-option" data-grade="D">
-            <input type="radio" name="grade" value="D">
-            <span class="grade-letter">D</span>
-            <span class="grade-desc">Strongly consider sitting out</span>
-          </label>
-          <label class="grade-option" data-grade="F">
-            <input type="radio" name="grade" value="F">
-            <span class="grade-letter">F</span>
-            <span class="grade-desc">Do not trade — protect capital</span>
-          </label>
+      <div class="card-body">
+        <ul class="checklist" id="watchlist-list">
+          <li><div class="check-box">✓</div><span class="check-text">Add stocks with fresh news catalysts</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Add stocks making outsized pre-market moves</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Add high relative volume movers</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Mark key technical levels — prior day high/low, prior close</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Draw trend lines and note key support/resistance</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Set price alerts for every ticker on the watch list</span></li>
+        </ul>
+        <div>
+          <div class="field-label">Today's tickers</div>
+          <textarea class="field-input" id="tickers" placeholder="NVDA (earnings gap), TSLA (upgrade), SPY (CPI)..."></textarea>
         </div>
       </div>
     </div>
+
+  </div><!-- /row-pair -->
+
+
+  <!-- ── LEVEL 3: TEMP CHECK + FINAL CHECK ── -->
+  <div class="row-label">
+    <span class="row-label-num">Step 3</span>
+    <div class="row-label-line"></div>
   </div>
 
-  <!-- CARD 4: Playbook -->
-  <div class="card wide">
-    <div class="card-head">
-      <span class="card-time">9:15 AM</span>
-      <span class="card-title">Playbook</span>
-      <span class="card-progress-mini" id="c4p" style="color:var(--muted)">tap to expand</span>
-    </div>
-    <div class="card-body">
-      <div>
-        <div class="field-label">Setups in play today — tap for guide</div>
-        <div class="playbook-grid" id="playbook-grid">
+  <div class="row-pair">
 
-          <div class="play-btn" data-play="Gap & Go" data-num="1" onclick="togglePlay(this)">
-            <div class="play-btn-top">
-              <span class="play-num">1</span>
-              <span class="play-name">Gap &amp; Go</span>
-            </div>
-            <div class="play-meta">
-              <span class="play-win">65–72%</span>
-              <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot"></div><div class="play-dot"></div></div>
-              <span class="play-diff">Easy</span>
-            </div>
-          </div>
-
-          <div class="play-btn" data-play="ORB 15-min" data-num="2" onclick="togglePlay(this)">
-            <div class="play-btn-top">
-              <span class="play-num">2</span>
-              <span class="play-name">ORB 15-min</span>
-            </div>
-            <div class="play-meta">
-              <span class="play-win">62–70%</span>
-              <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot"></div><div class="play-dot"></div></div>
-              <span class="play-diff">Easy</span>
-            </div>
-          </div>
-
-          <div class="play-btn" data-play="VWAP Reclaim" data-num="3" onclick="togglePlay(this)">
-            <div class="play-btn-top">
-              <span class="play-num">3</span>
-              <span class="play-name">VWAP Reclaim</span>
-            </div>
-            <div class="play-meta">
-              <span class="play-win">60–68%</span>
-              <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot filled"></div><div class="play-dot"></div></div>
-              <span class="play-diff">Easy-Med</span>
-            </div>
-          </div>
-
-          <div class="play-btn" data-play="Breakout" data-num="4" onclick="togglePlay(this)">
-            <div class="play-btn-top">
-              <span class="play-num">4</span>
-              <span class="play-name">Breakout</span>
-            </div>
-            <div class="play-meta">
-              <span class="play-win">58–65%</span>
-              <div class="play-dots"><div class="play-dot filled"></div><div class="play-dot filled"></div><div class="play-dot"></div></div>
-              <span class="play-diff">Easy-Med</span>
-            </div>
-          </div>
-
+    <!-- Temp Check -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-time">9:00 AM</span>
+        <span class="card-title">Temp Check</span>
+        <span class="card-progress-mini"><span id="c3p">—</span></span>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="field-label">Mental state check</div>
+          <ul class="checklist" id="temp-list">
+            <li><div class="check-box">✓</div><span class="check-text">Did I sleep well? Am I rested?</span></li>
+            <li><div class="check-box">✓</div><span class="check-text">Am I emotionally centered — nothing off outside trading?</span></li>
+            <li><div class="check-box">✓</div><span class="check-text">Am I mentally sharp and focused today?</span></li>
+          </ul>
         </div>
-
-        <!-- DETAIL PANELS -->
-        <div class="play-detail" id="detail-1">
-          <div class="play-detail-title">Gap &amp; Go — How to play it</div>
-          <div class="play-section">
-            <div class="play-section-label">Steps</div>
-            <div class="play-steps">
-              <div class="play-step"><div class="play-step-num">1</div><span>Pre-market: find stocks gapping 4%+ on a news catalyst (earnings, upgrade, PR)</span></div>
-              <div class="play-step"><div class="play-step-num">2</div><span>Mark the pre-market high. This is your key level at the open</span></div>
-              <div class="play-step"><div class="play-step-num">3</div><span>At 9:30 watch the first 1–2 candles. Let the initial spike happen — do not chase</span></div>
-              <div class="play-step"><div class="play-step-num">4</div><span>Buy the first pullback candle that holds above VWAP or the pre-market high</span></div>
-              <div class="play-step"><div class="play-step-num">5</div><span>Stop below the low of the pullback candle. Target: prior resistance or high of day</span></div>
-              <div class="play-step"><div class="play-step-num">6</div><span>If it reclaims and breaks pre-market high with volume — full send</span></div>
-            </div>
+        <div class="divider"></div>
+        <div>
+          <div class="field-label">Today's grade</div>
+          <div class="grade-grid" id="grade-grid">
+            <label class="grade-option" data-grade="A">
+              <input type="radio" name="grade" value="A">
+              <span class="grade-letter">A</span>
+              <span class="grade-desc">Full sizing — press your edge</span>
+            </label>
+            <label class="grade-option" data-grade="B">
+              <input type="radio" name="grade" value="B">
+              <span class="grade-letter">B</span>
+              <span class="grade-desc">Standard sizing, stay disciplined</span>
+            </label>
+            <label class="grade-option" data-grade="C">
+              <input type="radio" name="grade" value="C">
+              <span class="grade-letter">C</span>
+              <span class="grade-desc">Size way down, trade selectively</span>
+            </label>
+            <label class="grade-option" data-grade="D">
+              <input type="radio" name="grade" value="D">
+              <span class="grade-letter">D</span>
+              <span class="grade-desc">Strongly consider sitting out</span>
+            </label>
+            <label class="grade-option" data-grade="F">
+              <input type="radio" name="grade" value="F">
+              <span class="grade-letter">F</span>
+              <span class="grade-desc">Do not trade — protect capital</span>
+            </label>
           </div>
-          <div class="play-section">
-            <div class="play-section-label">Indicators</div>
-            <div class="play-tags-row">
-              <span class="play-pill">VWAP</span><span class="play-pill">Pre-mkt High</span><span class="play-pill">Relative Volume</span><span class="play-pill">L2 / Tape</span>
-            </div>
-          </div>
-          <div class="play-section">
-            <div class="play-section-label">Best time</div>
-            <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>9:30–10:30 AM ET. After 10:30 the momentum fades fast</span></div>
-          </div>
-        </div>
-
-        <div class="play-detail" id="detail-2">
-          <div class="play-detail-title">ORB 15-min — How to play it</div>
-          <div class="play-section">
-            <div class="play-section-label">Steps</div>
-            <div class="play-steps">
-              <div class="play-step"><div class="play-step-num">1</div><span>Let the first 15 minutes trade. Do not enter during this window — just watch</span></div>
-              <div class="play-step"><div class="play-step-num">2</div><span>Mark the exact high and low of the 9:30–9:45 candle. This is your range</span></div>
-              <div class="play-step"><div class="play-step-num">3</div><span>Set alerts at both levels. At 9:44 be ready — you want to react the instant the candle closes</span></div>
-              <div class="play-step"><div class="play-step-num">4</div><span>If price breaks above the range high on volume: go long. Stop below range high</span></div>
-              <div class="play-step"><div class="play-step-num">5</div><span>If price breaks below the range low on volume: go short. Stop above range low</span></div>
-              <div class="play-step"><div class="play-step-num">6</div><span>Best when the breakout aligns with the pre-market trend direction</span></div>
-            </div>
-          </div>
-          <div class="play-section">
-            <div class="play-section-label">Indicators</div>
-            <div class="play-tags-row">
-              <span class="play-pill">15-min Chart</span><span class="play-pill">VWAP</span><span class="play-pill">Volume Surge</span><span class="play-pill">Pre-mkt Trend</span>
-            </div>
-          </div>
-          <div class="play-section">
-            <div class="play-section-label">Best time</div>
-            <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>Entry at 9:45 AM ET. Secondary entries 10:00–11:00 on retests of the range</span></div>
-          </div>
-        </div>
-
-        <div class="play-detail" id="detail-3">
-          <div class="play-detail-title">VWAP Reclaim — How to play it</div>
-          <div class="play-section">
-            <div class="play-section-label">Steps</div>
-            <div class="play-steps">
-              <div class="play-step"><div class="play-step-num">1</div><span>Find a stock that dipped below VWAP but is showing signs of stabilizing</span></div>
-              <div class="play-step"><div class="play-step-num">2</div><span>Watch for a candle that closes back above VWAP with increasing volume</span></div>
-              <div class="play-step"><div class="play-step-num">3</div><span>Enter on the candle that reclaims VWAP or the first pullback to VWAP after reclaim</span></div>
-              <div class="play-step"><div class="play-step-num">4</div><span>Stop below VWAP — if it loses VWAP again the setup is failed</span></div>
-              <div class="play-step"><div class="play-step-num">5</div><span>Target: prior high, next resistance level, or HOD</span></div>
-              <div class="play-step"><div class="play-step-num">6</div><span>Strongest when the broader market (SPY) is also above its VWAP</span></div>
-            </div>
-          </div>
-          <div class="play-section">
-            <div class="play-section-label">Indicators</div>
-            <div class="play-tags-row">
-              <span class="play-pill">VWAP</span><span class="play-pill">Volume</span><span class="play-pill">SPY Correlation</span><span class="play-pill">1-min / 5-min</span>
-            </div>
-          </div>
-          <div class="play-section">
-            <div class="play-section-label">Best time</div>
-            <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>9:45–11:30 AM and 1:00–2:30 PM ET. Avoid the choppy midday 11:30–1:00 window</span></div>
-          </div>
-        </div>
-
-        <div class="play-detail" id="detail-4">
-          <div class="play-detail-title">Breakout — How to play it</div>
-          <div class="play-section">
-            <div class="play-section-label">Steps</div>
-            <div class="play-steps">
-              <div class="play-step"><div class="play-step-num">1</div><span>Identify a stock consolidating in a tight range near a key resistance level (prior high, round number)</span></div>
-              <div class="play-step"><div class="play-step-num">2</div><span>The tighter and longer the consolidation the better — coiled spring effect</span></div>
-              <div class="play-step"><div class="play-step-num">3</div><span>Watch for a candle that closes above resistance with a volume spike (2x average or more)</span></div>
-              <div class="play-step"><div class="play-step-num">4</div><span>Enter on the breakout candle or the first pullback retest of the broken level</span></div>
-              <div class="play-step"><div class="play-step-num">5</div><span>Stop below the breakout level — if it fails back below, the breakout is false</span></div>
-              <div class="play-step"><div class="play-step-num">6</div><span>Target: measured move (height of the base added to breakout point)</span></div>
-            </div>
-          </div>
-          <div class="play-section">
-            <div class="play-section-label">Indicators</div>
-            <div class="play-tags-row">
-              <span class="play-pill">Resistance Level</span><span class="play-pill">Volume</span><span class="play-pill">5-min Chart</span><span class="play-pill">ATR</span>
-            </div>
-          </div>
-          <div class="play-section">
-            <div class="play-section-label">Best time</div>
-            <div class="play-step"><div class="play-step-num" style="width:auto;padding:0 6px;">⏱</div><span>9:45–11:00 AM and 2:00–3:30 PM ET. Volume must confirm — no volume = no breakout</span></div>
-          </div>
-        </div>
-
-        <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
-          <input class="field-input" id="play-input" type="text" inputmode="numeric" placeholder="Type numbers to activate e.g. 1 2" style="min-height:unset; padding:0.4rem 0.7rem; font-size:0.75rem; flex:1;">
-          <button onclick="applyPlayNumbers()" style="font-family:var(--mono); font-size:0.7rem; padding:0.4rem 0.8rem; background:#0d2a30; border:1px solid #40c8dc; color:#40c8dc; border-radius:4px; cursor:pointer; white-space:nowrap; letter-spacing:0.05em;">Apply</button>
         </div>
       </div>
-      <div>
-        <div class="field-label">Playbook notes</div>
-        <textarea class="field-input" id="playbookNotes" placeholder="What setups are lining up and why..."></textarea>
+    </div>
+
+    <!-- Final Check -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-time">9:25 AM</span>
+        <span class="card-title">Final Check Before Open</span>
+        <span class="card-progress-mini"><span id="c5p">0</span>/4</span>
+      </div>
+      <div class="card-body">
+        <ul class="checklist" id="final-list">
+          <li><div class="check-box">✓</div><span class="check-text">All alerts are set — no excuses to miss a move</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Risk sizing confirmed based on today's grade</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Not committed to any ticker — ready to react to what sets up</span></li>
+          <li><div class="check-box">✓</div><span class="check-text">Playbooks reviewed — I know what I'm looking for</span></li>
+        </ul>
+        <div class="divider"></div>
+        <div>
+          <div class="field-label">Calculator</div>
+          <div class="calc-grid">
+            <div class="calc-box">
+              <div class="calc-label">Entry Price</div>
+              <input class="calc-input" id="calc-entry" type="number" step="0.01" placeholder="0.00" oninput="calcAutoStop(); calcUpdate()">
+            </div>
+            <div class="calc-box">
+              <div class="calc-label">Exit Price</div>
+              <input class="calc-input" id="calc-exit" type="number" step="0.01" placeholder="0.00" oninput="calcUpdate()">
+            </div>
+            <div class="calc-box">
+              <div class="calc-label">Shares</div>
+              <input class="calc-input" id="calc-shares-input" type="number" step="1" value="100" oninput="calcAutoStop(); calcUpdate()">
+            </div>
+            <div class="calc-box" style="grid-column: 1 / -1;">
+              <div class="calc-label">Stop Loss Price <span style="color:var(--muted);font-size:0.55rem;margin-left:4px;">auto: entry − ($250 ÷ shares)</span></div>
+              <input class="calc-input" id="calc-stop" type="number" step="0.01" placeholder="0.00" oninput="calcUpdate()">
+            </div>
+          </div>
+          <div class="calc-results" id="calc-results">
+            <div class="calc-result-row">
+              <span class="calc-result-label">Stop Loss Price</span>
+              <span class="calc-result-val neutral" id="calc-stop-display">—</span>
+            </div>
+            <div class="calc-result-row">
+              <span class="calc-result-label">Max Loss</span>
+              <span class="calc-result-val" id="calc-maxloss">—</span>
+            </div>
+            <div class="calc-result-row">
+              <span class="calc-result-label">P&amp;L at target</span>
+              <span class="calc-result-val" id="calc-pnl">—</span>
+            </div>
+            <div class="calc-result-row">
+              <span class="calc-result-label">Risk / Reward</span>
+              <span class="calc-result-val" id="calc-rr">—</span>
+            </div>
+            <div class="calc-result-row">
+              <span class="calc-result-label">Position size</span>
+              <span class="calc-result-val" id="calc-size">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div>
+          <div class="field-label">Open notes</div>
+          <textarea class="field-input" id="playNotes" placeholder="What looks set up today..."></textarea>
+        </div>
+        <div class="rule-note">I am not trying to predict anything. I am never committed to any specific ticker or sector.</div>
       </div>
     </div>
-  </div><!-- /main-top -->
 
-  <!-- Bottom: 4 cards -->
-  <div class="main-bottom">
-    <div class="card-head">
-      <span class="card-time">9:25 AM</span>
-      <span class="card-title">Final Check Before Open</span>
-      <span class="card-progress-mini"><span id="c5p">0</span>/4</span>
-    </div>
-    <div class="card-body">
-      <ul class="checklist" id="final-list">
-        <li><div class="check-box">✓</div><span class="check-text">All alerts are set — no excuses to miss a move</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Risk sizing confirmed based on today's grade</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Not committed to any ticker — ready to react to what sets up</span></li>
-        <li><div class="check-box">✓</div><span class="check-text">Playbooks reviewed — I know what I'm looking for</span></li>
-      </ul>
-      <div>
-        <div class="field-label">Open notes</div>
-        <textarea class="field-input" id="playNotes" placeholder="What looks set up today..."></textarea>
-      </div>
-      <div class="rule-note">I am not trying to predict anything. I am never committed to any specific ticker or sector.</div>
-    </div>
-  </div>
+  </div><!-- /row-pair -->
 
-</div><!-- /main-bottom -->
+</div><!-- /main -->
 
 <script>
 const today = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
@@ -1015,7 +1090,6 @@ function updateCountdown() {
   const diff = open - et;
   const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
   el.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`; el.className = 'countdown';
-  // session label
   const preOpen = new Date(et); preOpen.setHours(4,0,0,0);
   document.getElementById('session-label').textContent = et >= preOpen ? 'ACTIVE' : 'INACTIVE';
 }
@@ -1062,28 +1136,57 @@ document.querySelectorAll('.grade-option').forEach(opt => {
 // ── PLAYBOOK NUMBER INPUT ──────────────────────────────────
 function applyPlayNumbers() {
   const val = document.getElementById('play-input').value;
-  const nums = val.replace(/[^0-9]/g, '').split('');
-  document.querySelectorAll('.play-btn').forEach(t => {
-    if (nums.includes(t.dataset.num)) { t.classList.add('active'); }
-    else t.classList.remove('active');
+  const nums = [...new Set(val.replace(/[^0-9]/g, '').split(''))].slice(0, 2);
+  activeSlots = [];
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('active'));
+  nums.forEach(n => {
+    const btn = document.querySelector(`.play-btn[data-num="${n}"]`);
+    if (btn) { activeSlots.push(n); btn.classList.add('active'); }
   });
   document.getElementById('play-input').value = '';
+  renderSlots();
   save();
 }
 document.getElementById('play-input').addEventListener('keydown', e => { if (e.key === 'Enter') applyPlayNumbers(); });
 
-// ── PLAYBOOK TOGGLE + DETAIL ───────────────────────────────
+// ── PLAYBOOK TOGGLE + DETAIL (max 2: slot-a left, slot-b right) ───
+// activeSlots[0] = num in slot-a, activeSlots[1] = num in slot-b
+let activeSlots = [];
+
+function renderSlots() {
+  const slotA = document.getElementById('slot-a');
+  const slotB = document.getElementById('slot-b');
+  slotA.innerHTML = '';
+  slotB.innerHTML = '';
+  if (activeSlots[0]) {
+    const d = document.getElementById('detail-' + activeSlots[0]);
+    if (d) { const clone = d.cloneNode(true); clone.classList.add('show'); clone.id = ''; slotA.appendChild(clone); }
+  }
+  if (activeSlots[1]) {
+    const d = document.getElementById('detail-' + activeSlots[1]);
+    if (d) { const clone = d.cloneNode(true); clone.classList.add('show'); clone.id = ''; slotB.appendChild(clone); }
+  }
+}
+
 function togglePlay(btn) {
   const num = btn.dataset.num;
-  const detail = document.getElementById('detail-' + num);
-  const wasActive = btn.classList.contains('active');
-  // close all details first
-  document.querySelectorAll('.play-detail').forEach(d => d.classList.remove('show'));
-  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('active'));
-  if (!wasActive) {
+  const idx = activeSlots.indexOf(num);
+
+  if (idx !== -1) {
+    // already open — remove from its slot
+    activeSlots.splice(idx, 1);
+    btn.classList.remove('active');
+  } else {
+    if (activeSlots.length >= 2) {
+      // bump oldest (slot-a), promote slot-b to slot-a, new goes to slot-b
+      const bumped = activeSlots.shift();
+      const bumpedBtn = document.querySelector(`.play-btn[data-num="${bumped}"]`);
+      if (bumpedBtn) bumpedBtn.classList.remove('active');
+    }
+    activeSlots.push(num);
     btn.classList.add('active');
-    if (detail) { detail.classList.add('show'); detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
   }
+  renderSlots();
   save();
 }
 
@@ -1099,7 +1202,8 @@ function save() {
   state.playbookNotes = document.getElementById('playbookNotes').value;
   const gradeEl = document.querySelector('.grade-option input:checked');
   if (gradeEl) state.grade = gradeEl.value;
-  document.querySelectorAll('.play-btn').forEach(t => state.plays.push(t.dataset.play));
+  document.querySelectorAll('.play-btn').forEach(t => { if(t.classList.contains('active')) state.plays.push(t.dataset.play); });
+  state.activeSlots = activeSlots.slice();
   localStorage.setItem('preMarketPrep', JSON.stringify(state));
 }
 
@@ -1119,6 +1223,14 @@ function restore() {
   }
   if (saved.plays) {
     document.querySelectorAll('.play-btn').forEach(t => { if(saved.plays.includes(t.dataset.play)) t.classList.add('active'); });
+  }
+  if (saved.activeSlots) {
+    activeSlots = saved.activeSlots;
+    activeSlots.forEach(n => {
+      const btn = document.querySelector(`.play-btn[data-num="${n}"]`);
+      if (btn) btn.classList.add('active');
+    });
+    renderSlots();
   }
   updateProgress();
 }
