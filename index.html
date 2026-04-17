@@ -673,15 +673,50 @@ document.getElementById('econCal').innerHTML = econEvents.map(e=>
 ).join('');
 
 // ── EARNINGS ─────────────────────────────────────────────
-const earnings = [
-  { ticker:'NFLX', info:'Netflix Inc',       when:'AMC' },
-  { ticker:'HAL',  info:'Halliburton Co',    when:'BMO' },
-  { ticker:'SLB',  info:'SLB (Schlumberger)',when:'BMO' },
-  { ticker:'AXP',  info:'American Express',  when:'BMO' },
-];
-document.getElementById('earningsGrid').innerHTML = earnings.map(e=>
-  `<div class="earn-cell"><div class="earn-ticker">${e.ticker}</div><div class="earn-info">${e.info}</div><div class="earn-when ${e.when==='BMO'?'earn-bmo':'earn-amc'}">${e.when}</div></div>`
-).join('');
+// const earnings = [
+//   { ticker:'NFLX', info:'Netflix Inc',       when:'AMC' },
+//   { ticker:'HAL',  info:'Halliburton Co',    when:'BMO' },
+//   { ticker:'SLB',  info:'SLB (Schlumberger)',when:'BMO' },
+//   { ticker:'AXP',  info:'American Express',  when:'BMO' },
+// ];
+fetch('market-data.json').then(r=>r.json()).then(data=>{
+  const e = data.earnings || [];
+  const c = data.catalyst || [];
+  const s = data.second_day || [];
+  
+  // Earnings grid
+  document.getElementById('earningsGrid').innerHTML = e.length ? e.map(play=>
+    `<div class="earn-cell"><div class="earn-ticker">${play.ticker}</div><div class="earn-info">${play.notes||''}</div><div class="earn-when earn-amc">${play.game_plan||''}</div></div>`
+  ).join('') : '<div class="earn-cell" style="grid-column:1/-1;color:var(--muted)">No earnings plays</div>';
+  
+  // Inject brief content with plays sections
+  const playsSection = `
+    <h2><span class="sec-icon">◆</span> Market Summary</h2>
+    <p>${data.summary||'No summary available.'}</p>
+    ${s.length ? `<h2><span class="sec-icon">◆</span> Second Day Plays</h2><div class="earnings-grid" id="secondDayGrid"></div>` : ''}
+    ${c.length ? `<h2><span class="sec-icon">◆</span> Catalyst Plays</h2><div class="earnings-grid" id="catalystGrid"></div>` : ''}
+  `;
+  
+  const briefDiv = document.getElementById('briefContent');
+  if(briefDiv) {
+    const orig = briefDiv.innerHTML;
+    briefDiv.innerHTML = playsSection + '<hr>' + orig;
+  }
+  
+  // Second day grid
+  if(document.getElementById('secondDayGrid')) {
+    document.getElementById('secondDayGrid').innerHTML = s.map(play=>
+      `<div class="earn-cell"><div class="earn-ticker">${play.ticker}</div><div class="earn-info">${play.notes||''}</div><div class="earn-when earn-amc">${play.game_plan||''}</div></div>`
+    ).join('');
+  }
+  
+  // Catalyst grid  
+  if(document.getElementById('catalystGrid')) {
+    document.getElementById('catalystGrid').innerHTML = c.map(play=>
+      `<div class="earn-cell"><div class="earn-ticker">${play.ticker}</div><div class="earn-info">${play.notes||''}</div><div class="earn-when earn-bmo">${play.game_plan||''}</div></div>`
+    ).join('');
+  }
+}).catch(e=>console.error('Failed to load market data:',e));
 
 // ── BRIEF CONTENT ─────────────────────────────────────────
 document.getElementById('briefContent').innerHTML = `
