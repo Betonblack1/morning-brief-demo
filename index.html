@@ -34,6 +34,24 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* HERO CHART */
+.hero { position: relative; height: 220px; overflow: hidden; border-bottom: 1px solid var(--border); background: var(--surface); }
+.hero-svg { width: 100%; height: 100%; display: block; }
+.hero-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem 2rem; background: linear-gradient(to top, rgba(8,11,15,0.85) 0%, rgba(8,11,15,0.2) 60%, transparent 100%); }
+.hero-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 0.25rem; }
+.hero-title { font-family: var(--mono); font-size: 1.6rem; font-weight: 600; color: var(--text); letter-spacing: 0.04em; }
+.hero-sub { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+/* INDICES STRIP - individual boxes */
+.index-cell { flex: 1; padding: 0.6rem 0.8rem; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 2px; background: var(--surface); }
+.index-cell:last-child { border-right: none; }
+.index-name { font-family: var(--mono); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cyan); }
+.index-val { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--text); margin-top: 2px; }
+.index-chg { font-family: var(--mono); font-size: 0.6rem; font-weight: 500; }
+.index-chg.up { color: var(--green); }
+.index-chg.down { color: var(--red); }
+.index-chg.flat { color: var(--muted); }
+
 body {
   font-family: var(--sans);
   background: var(--bg);
@@ -149,6 +167,7 @@ body::after {
   position: relative;
   overflow: hidden;
   animation: fadeIn 0.5s ease both;
+  flex: 1;
 }
 .idx:last-child { border-right: none; }
 .idx:nth-child(1) { animation-delay: 0s; }
@@ -365,6 +384,16 @@ body::after {
   </div>
 </div>
 
+<!-- HERO CHART -->
+<div class="hero">
+  <svg class="hero-svg" id="heroChart" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="hero-overlay">
+    <div class="hero-label">NYSE · NASDAQ · Pre-Market</div>
+    <div class="hero-title">Morning Brief</div>
+    <div class="hero-sub">What is in play today — not a prediction, a preparation.</div>
+  </div>
+</div>
+
 <!-- INDICES STRIP -->
 <div style="display:flex;justify-content:center;">
 <div class="indices-strip" id="indicesStrip"></div>
@@ -462,6 +491,43 @@ function sparkSVG(color, seed) {
   const c = color || 'var(--green)';
   return `<svg viewBox="0 0 48 18" class="idx-spark" xmlns="http://www.w3.org/2000/svg"><polyline points="${pts.join(' ')}" fill="none" stroke="${c}" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
+
+// ── HERO CHART (animated SVG candlestick/line) ─────────────
+function drawHero() {
+  const svg = document.getElementById('heroChart');
+  const W=1200, H=220, pad=40;
+  const pts = [];
+  let y = 130;
+  for (let i=0; i<120; i++) {
+    y += (Math.random()-0.48)*6;
+    y = Math.max(60, Math.min(180, y));
+    pts.push([i*(W/(119)), y]);
+  }
+  const pathD = pts.map((p,i)=>(i===0?`M${p[0]},${p[1]}`:`L${p[0]},${p[1]}`)).join(' ');
+  const areaD = pathD + ` L${W},${H} L0,${H} Z`;
+  let grid='';
+  for (let i=1;i<5;i++){ const gy=i*(H/5); grid+=`<line x1="0" y1="${gy}" x2="${W}" y2="${gy}" stroke="#1e2730" stroke-width="1"/>`; }
+  for (let i=1;i<10;i++){ const gx=i*(W/10); grid+=`<line x1="${gx}" y1="0" x2="${gx}" y2="${H}" stroke="#1e2730" stroke-width="1"/>`; }
+  const lp=pts[pts.length-1];
+  const isUp = pts[pts.length-1][1] < pts[0][1];
+  const lineColor = isUp ? '#00c896' : '#ff5060';
+  const fillColor = isUp ? '#00c89608' : '#ff506008';
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="heroGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="${lineColor}" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    ${grid}
+    <path d="${areaD}" fill="url(#heroGrad)"/>
+    <path d="${pathD}" fill="none" stroke="${lineColor}" stroke-width="1.5" filter="url(#glow)" opacity="0.9"/>
+    <circle cx="${lp[0]}" cy="${lp[1]}" r="4" fill="${lineColor}" opacity="0.9"/>
+    <circle cx="${lp[0]}" cy="${lp[1]}" r="8" fill="${lineColor}" opacity="0.2"/>
+  `;
+}
+drawHero();
 
 // ── HELPERS ───────────────────────────────────────────────
 function fmtNum(n, dec=2) { return isNaN(n) ? '—' : Number(n).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
