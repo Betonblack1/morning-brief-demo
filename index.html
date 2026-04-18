@@ -131,17 +131,20 @@ body::after {
 .indices-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border-bottom: 1px solid var(--border);
+  border: 2px solid var(--blue);
+  box-shadow: 0 0 12px rgba(64,160,255,0.3), inset 0 0 20px rgba(64,160,255,0.05);
   background: var(--surface);
+  border-radius: 6px;
+  margin: 8px;
 }
 .indices-strip .idx:nth-child(3) { border-right: none; }
 .indices-strip .idx:nth-child(n+4) { border-top: 1px solid var(--border); }
 .idx {
-  padding: 1rem 1.2rem;
+  padding: 0.5rem 0.6rem;
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   position: relative;
   overflow: hidden;
   animation: fadeIn 0.5s ease both;
@@ -159,16 +162,16 @@ body::after {
 /* ── TICKER NAME: bold, aqua, same size as value ── */
 .idx-name {
   font-family: var(--mono);
-  font-size: 0.95rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--cyan);
 }
 
-.idx-spark { width: 48px; height: 18px; }
-.idx-val { font-family: var(--mono); font-size: 1.9rem; font-weight: 600; color: var(--text); margin-top: 2px; line-height: 1.1; }
-.idx-chg { font-family: var(--mono); font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 3px; }
+.idx-spark { width: 24px; height: 10px; }
+.idx-val { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); margin-top: 1px; line-height: 1.1; }
+.idx-chg { font-family: var(--mono); font-size: 0.6rem; font-weight: 500; display: flex; align-items: center; gap: 2px; }
 .idx-chg.up { color: var(--green); }
 .idx-chg.down { color: var(--red); }
 .idx-chg.flat { color: var(--muted); }
