@@ -132,10 +132,11 @@ body::after {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border: 2px solid var(--blue);
-  box-shadow: 0 0 12px rgba(64,160,255,0.3), inset 0 0 20px rgba(64,160,255,0.05);
+  box-shadow: 0 0 20px rgba(64,160,255,0.6), 0 0 40px rgba(64,160,255,0.3), inset 0 0 20px rgba(64,160,255,0.1);
   background: var(--surface);
   border-radius: 6px;
   margin: 8px;
+  max-width: 50%;
 }
 .indices-strip .idx:nth-child(3) { border-right: none; }
 .indices-strip .idx:nth-child(n+4) { border-top: 1px solid var(--border); }
@@ -365,7 +366,9 @@ body::after {
 </div>
 
 <!-- INDICES STRIP -->
+<div style="display:flex;justify-content:center;">
 <div class="indices-strip" id="indicesStrip"></div>
+</div>
 
 <!-- KEY LEVELS BAR -->
 <div class="key-levels" id="keyLevels"></div>
